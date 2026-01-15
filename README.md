@@ -1,5 +1,13 @@
 # Concept Activation Regions
 
+
+1) Download the master branch.
+2) Use Python version 3.9.x
+3) Set up Conda environment: pip install -r requirements.txt
+4) Create a folder named 'data' under _experiments_. Download dataset from Google Drive link: https://drive.google.com/drive/folders/1T7v5qXY8xU67Slkw0v4WZEkcA1-6CzJI?usp=drive_link, and save them under the 'data' folder.
+5) Run _experiments/seer.py_
+
+
 ![image](main_figure.png "Concept Activation Regions")
 Code Author: Jonathan Crabbé ([jc2133@cam.ac.uk](mailto:jc2133@cam.ac.uk))
 
