@@ -366,82 +366,85 @@ class SEERDataset(Dataset):
         assert 0 < test_fraction < 1
         data_dir = Path(path_csv).parent
         if not (data_dir/"X_train.csv").exists(): # If the train-test split has not been performed yet
-            expected_columns = [
-                "Age at Diagnosis",
-                "PSA Lab Value",
-                "T Stage",
-                "Grade",
-                "AJCC Stage",
-                "Primary Gleason",
-                "Secondary Gleason",
-                "Composite Gleason",
-                "Number of Cores Positive",
-                "Number of Cores Negative",
-                "Number of Cores Examined",
-                "Censoring",
-                "Days to death or current survival status",
-                "cancer related death",
-                "any cause of  death",
-            ]
+            # expected_columns = [
+            #     "Age at Diagnosis",
+            #     "PSA Lab Value",
+            #     "T Stage",
+            #     "Grade",
+            #     "Primary Gleason",
+            #     "Secondary Gleason",
+            #     "Number of Cores Positive",
+            #     "Number of Cores Examined",
 
+            #           "AJCC Stage",
+            #          "Composite Gleason",
+            #          "Number of Cores Negative",
+            #         "Censoring",
+            #          "Days to death or current survival status",
+            #           "cancer related death",
+            #          "any cause of death",
+            # ]
+            #
             dataset = pd.read_csv(path_csv)
-            assert set(dataset.columns) == set(expected_columns), "Invalid dataset provided."
 
-            X = dataset.drop(
-                [   "Censoring",
-                    "Days to death or current survival status",
-                    "cancer related death",
-                    "any cause of  death",
-                    "Composite Gleason",
-                    "Number of Cores Negative",
-                    "AJCC Stage",
-                ],
-                axis=1,
-            )
-
-            rename_cols = {
-                "Age at Diagnosis": "Age at Diagnosis",
-                "PSA Lab Value": "PSA (ng/ml)",
-                "T Stage": "Clinical T stage",
-                "Grade": "Histological grade group",
-                "Number of Cores Positive": "Number of Cores Positive",
-                "Number of Cores Examined": "Number of Cores Examined",
-            }
-            X = X.rename(columns=rename_cols)
-
-            Y = dataset["cancer related death"]
-            T = dataset["Days to death or current survival status"]
-
-            # Remove empty events
-            remove_empty = T > 0
-            X = X[remove_empty]
-            Y = Y[remove_empty]
-            T = T[remove_empty]
-
-            # One-hot encoding
-            cat_columns = ["Clinical T stage", "Primary Gleason", "Secondary Gleason"]
-            encoders = {}
-            for col in cat_columns:
-                ohe = OneHotEncoder(handle_unknown="ignore", sparse=False)
-                ohe.fit(X[[col]].values)
-
-                encoders[col] = ohe
-
-            def encoder(df: pd.DataFrame) -> pd.DataFrame:
-                output = df.copy()
-                for col in encoders:
-                    ohe = encoders[col]
-                    encoded = pd.DataFrame(
-                        ohe.transform(output[[col]].values),
-                        columns=ohe.get_feature_names_out([col]),
-                        index=output.index.copy(),
-                    )
-                    output = pd.concat([output, encoded], axis=1)
-                    output.drop(columns=[col], inplace=True)
-
-                return output
-
-            X = encoder(X)
+            # assert set(dataset.columns) == set(expected_columns), "Invalid dataset provided."
+            #
+            # X = dataset.drop(
+            #     [   "Censoring",
+            #         "Days to death or current survival status",
+            #         "cancer related death",
+            #         "any cause of  death",
+            #         "Composite Gleason",
+            #         "Number of Cores Negative",
+            #         "AJCC Stage",
+            #     ],
+            #     axis=1,
+            # )
+            #
+            # rename_cols = {
+            #     "Age at Diagnosis": "Age at Diagnosis",
+            #     "PSA Lab Value": "PSA (ng/ml)",
+            #     "T Stage": "Clinical T stage",
+            #     "Grade": "Histological grade group",
+            #     "Number of Cores Positive": "Number of Cores Positive",
+            #     "Number of Cores Examined": "Number of Cores Examined",
+            # }
+            # X = X.rename(columns=rename_cols)
+            #
+            X = dataset.drop('Vital status recode', axis=1)
+            Y = dataset["Vital status recode"]
+            # T = dataset["Days to death or current survival status"]
+            #
+            # # Remove empty events
+            # remove_empty = T > 0
+            # X = X[remove_empty]
+            # Y = Y[remove_empty]
+            # T = T[remove_empty]
+            #
+            # # One-hot encoding
+            # cat_columns = ["Clinical T stage", "Primary Gleason", "Secondary Gleason"]
+            # encoders = {}
+            # for col in cat_columns:
+            #     ohe = OneHotEncoder(handle_unknown="ignore", sparse=False)
+            #     ohe.fit(X[[col]].values)
+            #
+            #     encoders[col] = ohe
+            #
+            # def encoder(df: pd.DataFrame) -> pd.DataFrame:
+            #     output = df.copy()
+            #     for col in encoders:
+            #         ohe = encoders[col]
+            #         encoded = pd.DataFrame(
+            #             ohe.transform(output[[col]].values),
+            #             columns=ohe.get_feature_names_out([col]),
+            #             index=output.index.copy(),
+            #         )
+            #         output = pd.concat([output, encoded], axis=1)
+            #         output.drop(columns=[col], inplace=True)
+            #
+            #     return output
+            #
+            # X = encoder(X)
 
             # Save a training set and a test set
             test_size = int(len(X) * test_fraction)
@@ -467,9 +470,9 @@ class SEERDataset(Dataset):
         assert not X.isnull().values.any()
 
         # Standardize continuous features
-        scaler = StandardScaler()
-        num_columns = ["Age at Diagnosis", "PSA (ng/ml)", "Number of Cores Positive", "Number of Cores Examined"]
-        X[num_columns] = scaler.fit_transform(X[num_columns])
+        # scaler = StandardScaler()
+        # num_columns = ["Age at Diagnosis", "PSA (ng/ml)", "Number of Cores Positive", "Number of Cores Examined"]
+        # X[num_columns] = scaler.fit_transform(X[num_columns])
 
         if oversample:  # Over-sample a balanced dataset
             over_sampler = RandomOverSampler(random_state=random_seed)
