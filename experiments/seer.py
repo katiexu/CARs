@@ -27,7 +27,7 @@ def train_model(
     assert 0 < test_fraction < 1
     logging.info("Now fitting a SEER classifier")
     torch.manual_seed(random_seed)
-    device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
+    device =  torch.device("cpu")
 
     model_dir = model_dir / model_name
     if not model_dir.exists():
@@ -42,10 +42,14 @@ def train_model(
         train=False,
         test_fraction=test_fraction,
     )
-    train_loader = DataLoader(train_data, batch_size, shuffle=True)
+    train_loader = DataLoader(train_data, batch_size, shuffle=False)
     test_loader = DataLoader(test_data, batch_size, shuffle=False)
 
     model = SEERClassifier(latent_dim, model_name)
+    try:
+        model.load_state_dict(torch.load(model_dir / f"{model_name}.pt"), strict=False)
+    except:
+        pass
     model.fit(device, train_loader, test_loader, model_dir, n_epoch=500, patience=50)
 
 
@@ -60,8 +64,8 @@ def concept_accuracy(
     save_dir: Path = Path.cwd() / "results/seer/concept_accuracy",
 ):
     torch.manual_seed(random_seed)
-    device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
-
+    # device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
+    device = torch.device("cpu")
     if not save_dir.exists():
         os.makedirs(save_dir)
 
@@ -137,7 +141,7 @@ def global_explanations(
     save_dir: Path = Path.cwd() / "results/seer/global_explanations",
 ):
     torch.manual_seed(random_seed)
-    device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
+    device =torch.device("cpu")
 
     if not save_dir.exists():
         os.makedirs(save_dir)
@@ -208,7 +212,7 @@ def feature_importance(
     save_dir: Path = Path.cwd() / "results/seer/feature_importance",
 ):
     torch.manual_seed(random_seed)
-    device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
+    device = torch.device("cpu")
 
     if not save_dir.exists():
         os.makedirs(save_dir)
@@ -237,7 +241,7 @@ def feature_importance(
     model.to(device)
 
     results_data = []
-    baselines = torch.zeros((1, 21)).to(device)
+    baselines = torch.zeros((1, 7)).to(device)
     for concept_id in range(5):
         logging.info(f"Now fitting a CAR classifier for Grade {concept_id+1} patients")
         X_train, C_train = generate_seer_concept_dataset(
@@ -256,9 +260,9 @@ def feature_importance(
         attributions = attribution_method.attribute(test_loader, baselines=baselines)
         for attribution in attributions:
             reduced_attribution = (
-                np.abs(attribution[:4]).tolist()
-                + [np.sum(np.abs(attribution[4:13]))]
-                + [np.sum(np.abs(attribution[13:]))]
+                np.abs(attribution[:5]).tolist()
+                + [np.sum(np.abs(attribution[5:]))]
+                # + [np.sum(np.abs(attribution[15:]))]
             )
             results_data.append(reduced_attribution)
 
@@ -284,12 +288,12 @@ if __name__ == "__main__":
         level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
     )
     parser = argparse.ArgumentParser()
-    parser.add_argument("--name", type=str, default="concept_accuracy")
+    parser.add_argument("--name", type=str, default="global_explanations")
     parser.add_argument("--seeds", nargs="+", type=int, default=list(range(1, 11)))
     parser.add_argument("--batch_size", type=int, default=500)
     parser.add_argument("--latent_dim", type=int, default=100)
-    parser.add_argument("--train", action="store_true")
-    parser.add_argument("--plot", action="store_true")
+    parser.add_argument("--train", action="store_true",default=False)
+    parser.add_argument("--plot", action="store_true",default=True)
     args = parser.parse_args()
 
     model_name = f"model_{args.latent_dim}"
