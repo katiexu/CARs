@@ -241,7 +241,7 @@ def feature_importance(
     model.to(device)
 
     results_data = []
-    baselines = torch.zeros((1, 7)).to(device)
+    baselines = torch.zeros((1, 22)).to(device)
     for concept_id in range(5):
         logging.info(f"Now fitting a CAR classifier for Grade {concept_id+1} patients")
         X_train, C_train = generate_seer_concept_dataset(
@@ -260,9 +260,9 @@ def feature_importance(
         attributions = attribution_method.attribute(test_loader, baselines=baselines)
         for attribution in attributions:
             reduced_attribution = (
-                np.abs(attribution[:5]).tolist()
-                + [np.sum(np.abs(attribution[5:]))]
-                # + [np.sum(np.abs(attribution[15:]))]
+                np.abs(attribution[:4]).tolist()
+                + [np.sum(np.abs(attribution[4:14]))]
+                + [np.sum(np.abs(attribution[14:]))]
             )
             results_data.append(reduced_attribution)
 
