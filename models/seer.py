@@ -12,7 +12,7 @@ class SEERClassifier(nn.Module):
         super(SEERClassifier, self).__init__()
         self.latent_dim = latent_dim
         self.name = name
-        self.fc1 = nn.Linear(21, 4 * self.latent_dim)
+        self.fc1 = nn.Linear(22, 4 * self.latent_dim)
         self.fc2 = nn.Linear(4 * self.latent_dim, self.latent_dim)
         self.out = nn.Linear(self.latent_dim, 2)
         self.checkpoints_files = []
