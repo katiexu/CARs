@@ -334,10 +334,10 @@ if __name__ == "__main__":
     #         args.plot,
     #         model_name=model_name,
     #     )
-    train_model(args.seeds[0], args.batch_size, args.latent_dim, model_name)
-    concept_accuracy(
-        args.seeds[0], args.batch_size, args.latent_dim, model_name=model_name
-    )
+    # train_model(args.seeds[0], args.batch_size, args.latent_dim, model_name)
+    # concept_accuracy(
+    #     args.seeds[0], args.batch_size, args.latent_dim, model_name=model_name
+    # )
     global_explanations(
         args.seeds[0],
         args.batch_size,
@@ -345,10 +345,10 @@ if __name__ == "__main__":
         args.plot,
         model_name=model_name,
     )
-    feature_importance(
-        args.seeds[0],
-        args.batch_size,
-        args.latent_dim,
-        args.plot,
-        model_name=model_name,
-    )
+    # feature_importance(
+    #     args.seeds[0],
+    #     args.batch_size,
+    #     args.latent_dim,
+    #     args.plot,
+    #     model_name=model_name,
+    # )

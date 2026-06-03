@@ -376,13 +376,12 @@ class EstimatorQiskitLayer(nn.Module):
             },
             transpile_options={
                 "seed_transpiler": self.SEED,
-                "optimization_level": 1,  # 0~3，建议1或2
+                "optimization_level": 0,  # 使用0以确保物理布局严格遵循 initial_layout
                 "initial_layout": list(range(self.n_qubits)),  # 固定物理比特（核心！）
-                "routing_method": "sabre"  # 有拓扑时用
             }
         )
 
-    def _build_parametric_circuit(self, n_layers=None):
+    def _build_parametric_circuit(self):
         """Construct parametric quantum circuit with consistent structure"""
         qc = QuantumCircuit(self.n_qubits)
         data_params = []
@@ -395,17 +394,13 @@ class EstimatorQiskitLayer(nn.Module):
 
         for i in tqdm(range(len(self.design)), desc="Building Circuit"):
             elem = self.design[i]
-            # If n_layers is specified, only include gates from layers < n_layers
-            if n_layers is not None and elem[2] >= n_layers:
-                continue
-
             if elem[0] == 'U3':
                 layer = elem[2]
                 qubit = elem[1][0]
                 param_key = (layer, qubit)
                 if param_key not in u3_param_map:
                     u3_params = ParameterVector(f'u3_l{layer}q{qubit}', length=3)
-                    u3_param_map[param_key] = u3_params
+                    u3_param_map[param_key] = list(u3_params)  # Convert to list of Parameters
                 theta, phi, lam = u3_param_map[param_key]
                 qc.u(theta, phi, lam, qubit)
             elif elem[0] == 'C(U3)':
@@ -415,7 +410,7 @@ class EstimatorQiskitLayer(nn.Module):
                 param_key = (layer, control_qubit)
                 if param_key not in cu3_param_map:
                     cu3_params = ParameterVector(f'cu3_l{layer}cq{control_qubit}', length=3)
-                    cu3_param_map[param_key] = cu3_params
+                    cu3_param_map[param_key] = list(cu3_params)  # Convert to list of Parameters
                 theta, phi, lam = cu3_param_map[param_key]
                 qc.cu(theta, phi, lam, 0, control_qubit, target_qubit)
             else:
@@ -424,6 +419,11 @@ class EstimatorQiskitLayer(nn.Module):
                 qc.rz(data_params[j][1], j)
                 qc.rx(data_params[j][2], j)
                 qc.ry(data_params[j][3], j)
+
+        # TRANSPILE qc_template to match physical mapping if needed,
+        # but GenericBackendV2 + Estimator usually handles this.
+        # To be safe, we use the raw template and ensure Estimator uses same layout.
+
         return qc, data_params, u3_param_map, cu3_param_map
 
     def _prebuild_observables(self):
@@ -438,7 +438,6 @@ class EstimatorQiskitLayer(nn.Module):
     def _preprocess_x(self, x):
         """Preprocess input data following the original pipeline"""
         bsz = x.shape[0]
-        x = x.unsqueeze(1)  # 增加通道维度
         x = x.view(bsz, 6, 4)
         return x
 
@@ -467,53 +466,14 @@ class EstimatorQiskitLayer(nn.Module):
     def forward(self, x):
         """Forward pass with fine-grained per-sample timing"""
         device = x.device
-        x_pre = self._preprocess_x(x)
-        bsz = x_pre.shape[0]
-
-        x_np = x_pre.detach().cpu().numpy()
-        u3_np = self.q_params_rot.detach().cpu().numpy()
-        cu3_np = self.q_params_enta.detach().cpu().numpy()
-
-        # 预构建observable
-        if self.args.task.startswith('QML'):
-            observables_list = self.observables[-2:]
-        else:
-            observables_list = self.observables
-
-        batch_results = []
-
-        # �� 创建样本级进度条（每个样本单独计时）
-        for batch_idx in tqdm(range(bsz), desc="Running Estimator",
-                              unit="sample", ncols=100):
-            # 单样本参数绑定
-            param_bind = {}
-            for j in range(self.n_qubits):
-                param_bind[self.data_params[j]] = x_np[batch_idx, j]
-            for (layer, q), params in self.u3_param_map.items():
-                param_bind[params] = u3_np[layer, q]
-            for (layer, cq), params in self.cu3_param_map.items():
-                param_bind[params] = cu3_np[layer, cq]
-
-            # 绑定参数生成电路
-            qc = self.qc_template.assign_parameters(param_bind)
-
-            # 批量运行所有observables（对当前样本）
-            job = self.estimator.run([qc] * len(observables_list), observables_list)
-            exp_vals = job.result().values
-
-            # 反向排列并存储
-            exp_vals = exp_vals[::-1]
-            batch_results.append(exp_vals)
-
-        # 转换为张量
-        output = torch.tensor(batch_results, dtype=torch.float32, device=device)
-        return output
+        # Use forward_remain with forward_n for exact consistency
+        dms = self.forward_n(x, self.n_layers)  # Run all layers
+        # forward_remain with n=n_layers will apply 0 gates and calculate expectation
+        output = self.forward_remain(dms, self.n_layers)
+        return output.to(device)
 
     def forward_n(self, x, n):
-        """
-        输入 input 和一个数字 n，输出 input 经过量子网络第 n 层后的密度矩阵。
-        n 从 1 开始计数。
-        """
+        """Forward pass up to layer n, outputting the density matrix"""
         device = x.device
         x_pre = self._preprocess_x(x)
         bsz = x_pre.shape[0]
@@ -522,61 +482,131 @@ class EstimatorQiskitLayer(nn.Module):
         u3_np = self.q_params_rot.detach().cpu().numpy()
         cu3_np = self.q_params_enta.detach().cpu().numpy()
 
-        # 使用修改后的 _build_parametric_circuit 构建截断的模板电路
-        # n 从 1 开始，对应 layer < n
-        qc_template_n, data_params_n, u3_param_map_n, cu3_param_map_n = self._build_parametric_circuit(n_layers=n)
+        batch_dms = []
 
-        # 在模板上添加 save_density_matrix
-        qc_template_n.save_density_matrix()
-
-        # 获取 qiskit-aer 的 AerSimulator 来获取密度矩阵
-        from qiskit_aer import AerSimulator
-        backend = AerSimulator(method='density_matrix', noise_model=self.noise_model, seed_simulator=self.SEED)
-
-        # 保持与 _init_estimator 一致的编译选项
-        transpile_options = {
-            "seed_transpiler": self.SEED,
-            "optimization_level": 1,
-            "initial_layout": list(range(self.n_qubits)),
-            "routing_method": "sabre"
-        }
-
-        # 1. 优化点：将 transpile 移出循环。只编译一次模板电路。
-        # 注意：transpile 会将 Parameter 对象保留在编译后的电路中。
-        compiled_template = transpile(qc_template_n, backend, **transpile_options)
-
-        all_qcs = []
         for batch_idx in range(bsz):
-            # 单样本参数绑定
             param_bind = {}
             for j in range(self.n_qubits):
-                param_bind[data_params_n[j]] = x_np[batch_idx, j]
-            for (layer, q), params in u3_param_map_n.items():
-                param_bind[params] = u3_np[layer, q]
-            for (layer, cq), params in cu3_param_map_n.items():
-                param_bind[params] = cu3_np[layer, cq]
+                for p_idx in range(4):
+                    param_bind[self.data_params[j][p_idx]] = x_np[batch_idx, j, p_idx]
+            for (layer, q), params in self.u3_param_map.items():
+                for p_idx in range(3):
+                    param_bind[params[p_idx]] = u3_np[layer, q, p_idx]
+            for (layer, cq), params in self.cu3_param_map.items():
+                for p_idx in range(3):
+                    param_bind[params[p_idx]] = cu3_np[layer, cq, p_idx]
 
-            # 2. 仅绑定参数，无需重新编译
-            qc_filled = compiled_template.assign_parameters(param_bind)
-            all_qcs.append(qc_filled)
+            qc = QuantumCircuit(self.n_qubits)
+            # Find elements in design that belong to layer < n
+            for elem in self.design:
+                if elem[2] < n:
+                    if elem[0] == 'U3':
+                        layer, qubit = elem[2], elem[1][0]
+                        params = self.u3_param_map[(layer, qubit)]
+                        qc.u(params[0], params[1], params[2], qubit)
+                    elif elem[0] == 'C(U3)':
+                        layer, control_qubit = elem[2], elem[1][0]
+                        target_qubit = elem[1][1]
+                        params = self.cu3_param_map[(layer, control_qubit)]
+                        qc.cu(params[0], params[1], params[2], 0, control_qubit, target_qubit)
+                    else:  # data
+                        j = int(elem[1][0])
+                        params = self.data_params[j]
+                        qc.ry(params[0], j)
+                        qc.rz(params[1], j)
+                        qc.rx(params[2], j)
+                        qc.ry(params[3], j)
 
-        # 3. 优化点：利用 Qiskit 批处理 (Batching)，一次性提交所有计算
-        job = backend.run(all_qcs)
-        result = job.result()
+            active_param_bind = {k: v for k, v in param_bind.items() if k in qc.parameters}
+            if active_param_bind:
+                qc_bound = qc.assign_parameters(active_param_bind)
+            else:
+                qc_bound = qc
+            if qc_bound.parameters:
+                qc_bound = qc_bound.assign_parameters({p: 0.0 for p in qc_bound.parameters})
 
-        batch_density_matrices = []
-        if bsz == 1:
-            # 单个样本时 result.data() 返回字典
-            dm = result.data()['density_matrix']
-            batch_density_matrices.append(dm.data)
+            # NOTE: We do NOT transpile here to match DensityMatrix's order with logic qubits
+            dm = DensityMatrix.from_instruction(qc_bound)
+            batch_dms.append(dm)
+
+        return batch_dms
+
+    def forward_remain(self, dms, n, x=None):
+        """Forward pass from layer n to the end, starting from density matrices"""
+        u3_np = self.q_params_rot.detach().cpu().numpy()
+        cu3_np = self.q_params_enta.detach().cpu().numpy()
+
+        x_np = None
+        if x is not None:
+            x_pre = self._preprocess_x(x)
+            x_np = x_pre.detach().cpu().numpy()
+
+        if self.args.task.startswith('QML'):
+            observables_list = self.observables[-2:]
         else:
-            # 多个样本时使用 result.data(i) 获取第 i 个结果
-            for i in range(bsz):
-                dm = result.data(i)['density_matrix']
-                batch_density_matrices.append(dm.data)
+            observables_list = self.observables
 
-        # 转换为 torch 张量
-        output = torch.tensor(np.array(batch_density_matrices), device=device)
+        batch_results = []
+        bsz = len(dms)
+
+        for batch_idx in range(bsz):
+            param_bind = {}
+            for (layer, q), params in self.u3_param_map.items():
+                if layer >= n:
+                    for p_idx in range(3):
+                        param_bind[params[p_idx]] = u3_np[layer, q, p_idx]
+            for (layer, cq), params in self.cu3_param_map.items():
+                if layer >= n:
+                    for p_idx in range(3):
+                        param_bind[params[p_idx]] = cu3_np[layer, cq, p_idx]
+
+            if x_np is not None:
+                for j in range(self.n_qubits):
+                    for p_idx in range(4):
+                        param_bind[self.data_params[j][p_idx]] = x_np[batch_idx, j, p_idx]
+
+            qc = QuantumCircuit(self.n_qubits)
+            for elem in self.design:
+                if elem[2] >= n:
+                    if elem[0] == 'U3':
+                        layer, qubit = elem[2], elem[1][0]
+                        params = self.u3_param_map[(layer, qubit)]
+                        qc.u(params[0], params[1], params[2], qubit)
+                    elif elem[0] == 'C(U3)':
+                        layer, control_qubit = elem[2], elem[1][0]
+                        target_qubit = elem[1][1]
+                        params = self.cu3_param_map[(layer, control_qubit)]
+                        qc.cu(params[0], params[1], params[2], 0, control_qubit, target_qubit)
+                    else:  # data
+                        j = int(elem[1][0])
+                        params = self.data_params[j]
+                        qc.ry(params[0], j)
+                        qc.rz(params[1], j)
+                        qc.rx(params[2], j)
+                        qc.ry(params[3], j)
+
+            active_param_bind = {k: v for k, v in param_bind.items() if k in qc.parameters}
+            if active_param_bind:
+                qc_bound = qc.assign_parameters(active_param_bind)
+            else:
+                qc_bound = qc
+            if qc_bound.parameters:
+                qc_bound = qc_bound.assign_parameters({p: 0.0 for p in qc_bound.parameters})
+
+            dm = dms[batch_idx]
+            final_dm = dm.evolve(qc_bound)
+
+            # Use original observables. DensityMatrix expectations use logic qubit order (0 to N-1)
+            # which matches what Estimator does when initial_layout is [0, 1, ..., N-1].
+            # AND Full forward reversed results: exp_vals = exp_vals[::-1]
+            exp_vals = []
+            for obs in observables_list:
+                exp_vals.append(final_dm.expectation_value(obs).real)
+
+            exp_vals = np.array(exp_vals)[::-1]
+            batch_results.append(exp_vals)
+
+        output = torch.tensor(batch_results, dtype=torch.float32)
         return output
 
 class QNet(nn.Module):
@@ -584,7 +614,7 @@ class QNet(nn.Module):
         super(QNet, self).__init__()
         self.args = arguments
         self.design = design
-        self.QuantumLayer = TQLayer(self.args, self.design)
+        self.QuantumLayer = EstimatorQiskitLayer(self.args, self.design)
         self.criterion = nn.CrossEntropyLoss()
         self.fc=nn.Linear(25,24)
 
