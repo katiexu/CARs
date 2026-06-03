@@ -17,7 +17,10 @@ def create_forward_hook(name: str, save_dir: Path):
     if (save_dir/f"{name}.npy").exists():  # Ensure that the hook is not going to append an existing file
         os.remove(save_dir/f"{name}.npy")
     def hook(module, input, output):
-        save_arr = output.detach().cpu().numpy()  # Convert tensor to Numpy array
+        if type(output) is not np.ndarray:
+            save_arr = output.detach().cpu().numpy() # Convert tensor to Numpy array
+        else :
+            save_arr = output
         save_arr = save_arr.reshape((save_arr.shape[0], -1))  # Flatten Numpy array
         with (save_dir/f"{name}.npy").open('ab') as f:
             np.save(f, save_arr)

@@ -18,19 +18,14 @@ from Arguments import Arguments
 torch.manual_seed(42)
 np.random.seed(42)
 
-# 2. 初始化参数和设计（使用你指定的single_code/enta_code）
 myargs = Arguments()
 # 你指定的配置
-single_code = [[1, 1, 1, 1, 1, 1, 1, 1, 1],
-               [2, 1, 1, 1, 1, 1, 1, 1, 1],
-               [3, 1, 1, 1, 1, 1, 1, 1, 1],
-               [4, 1, 1, 1, 1, 1, 1, 1, 1]]
-enta_code = [[1, 2, 2, 2, 2],
-             [2, 3, 3, 3, 3],
-             [3, 4, 4, 4, 4],
-             [4, 1, 1, 1, 1]]
+n_layers = myargs.n_layers
+n_qubits = myargs.n_qubits
+single = [[i]+[1]*2*n_layers for i in range(1,n_qubits+1)]
+enta = [[i]+[i+1]*n_layers for i in range(1,n_qubits)]+[[n_qubits]+[1]*n_layers]
 arch_code = [myargs.n_qubits, myargs.n_layers]  # [4,4]
-design = single_enta_to_design(single_code, enta_code, arch_code)
+design = single_enta_to_design(single, enta, arch_code)
 
 
 def train_model(
@@ -316,26 +311,44 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     model_name = f"model_{args.latent_dim}"
-    if args.train:
-        train_model(args.seeds[0], args.batch_size, args.latent_dim, model_name)
-
-    if args.name == "concept_accuracy":
-        concept_accuracy(
-            args.seeds[0], args.batch_size, args.latent_dim, model_name=model_name
-        )
-    elif args.name == "global_explanations":
-        global_explanations(
-            args.seeds[0],
-            args.batch_size,
-            args.latent_dim,
-            args.plot,
-            model_name=model_name,
-        )
-    elif args.name == "feature_importance":
-        feature_importance(
-            args.seeds[0],
-            args.batch_size,
-            args.latent_dim,
-            args.plot,
-            model_name=model_name,
-        )
+    # if args.train:
+    #     train_model(args.seeds[0], args.batch_size, args.latent_dim, model_name)
+    #
+    # if args.name == "concept_accuracy":
+    #     concept_accuracy(
+    #         args.seeds[0], args.batch_size, args.latent_dim, model_name=model_name
+    #     )
+    # elif args.name == "global_explanations":
+    #     global_explanations(
+    #         args.seeds[0],
+    #         args.batch_size,
+    #         args.latent_dim,
+    #         args.plot,
+    #         model_name=model_name,
+    #     )
+    # elif args.name == "feature_importance":
+    #     feature_importance(
+    #         args.seeds[0],
+    #         args.batch_size,
+    #         args.latent_dim,
+    #         args.plot,
+    #         model_name=model_name,
+    #     )
+    train_model(args.seeds[0], args.batch_size, args.latent_dim, model_name)
+    concept_accuracy(
+        args.seeds[0], args.batch_size, args.latent_dim, model_name=model_name
+    )
+    global_explanations(
+        args.seeds[0],
+        args.batch_size,
+        args.latent_dim,
+        args.plot,
+        model_name=model_name,
+    )
+    feature_importance(
+        args.seeds[0],
+        args.batch_size,
+        args.latent_dim,
+        args.plot,
+        model_name=model_name,
+    )

@@ -199,10 +199,16 @@ class CAR(ConceptExplainer, ABC):
             The density of the latent representations under the relevant concept set
         """
         kernel = self.get_kernel_function()
-        latent_reps = latent_reps.to(self.device)
-        concept_reps = torch.from_numpy(self.get_concept_reps(positive_set)).to(
-            self.device
-        )
+        if type(latent_reps) is not np.ndarray:
+            latent_reps = latent_reps.to(self.device)
+            concept_reps = torch.from_numpy(self.get_concept_reps(positive_set)).to(
+                self.device
+            )
+        else:
+            latent_reps = torch.from_numpy(latent_reps).to(self.device)
+            concept_reps = torch.from_numpy(self.get_concept_reps(positive_set)).to(
+                self.device
+            )
         density = kernel(concept_reps, latent_reps).mean(dim=0)
         return density
 
@@ -340,6 +346,7 @@ class CAV(ConceptExplainer, ABC):
 
     def concept_importance(
         self,
+        X_test,
         latent_reps: np.ndarray,
         labels: torch.Tensor = None,
         num_classes: int = None,
@@ -357,7 +364,7 @@ class CAV(ConceptExplainer, ABC):
         """
         one_hot_labels = F.one_hot(labels, num_classes).to(self.device)
         latent_reps = torch.from_numpy(latent_reps).to(self.device).requires_grad_()
-        outputs = rep_to_output(latent_reps)
+        outputs = rep_to_output(latent_reps, X_test)
         grads = torch.autograd.grad(outputs, latent_reps, grad_outputs=one_hot_labels)[
             0
         ]

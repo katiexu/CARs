@@ -45,7 +45,7 @@ def train_mnist_model(
     data_dir: Path = Path.cwd() / "data/mnist",
 ) -> None:
     logging.info("Fitting MNIST classifier")
-    device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
+    device = torch.device("cpu")
     model_dir = model_dir / model_name
     if not model_dir.exists():
         os.makedirs(model_dir)
@@ -74,7 +74,7 @@ def concept_accuracy(
     model_dir: Path = Path.cwd() / f"results/mnist/",
     model_name: str = "model",
 ) -> None:
-    device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
+    device = torch.device("cpu")
     torch.manual_seed(random_seeds[0])
 
     representation_dir = save_dir / f"{model_name}_representations"
@@ -160,7 +160,7 @@ def statistical_significance(
     model_dir: Path = Path.cwd() / "results/mnist",
     model_name: str = "model",
 ) -> None:
-    device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
+    device = torch.device("cpu")
     torch.manual_seed(random_seed)
     model_dir = model_dir / model_name
     representation_dir = save_dir / f"{model_name}_representations"
@@ -227,7 +227,7 @@ def global_explanations(
     model_dir: Path = Path.cwd() / f"results/mnist",
     model_name: str = "model",
 ) -> None:
-    device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
+    device = torch.device("cpu")
     torch.manual_seed(random_seed)
 
     if not save_dir.exists():
@@ -311,7 +311,7 @@ def feature_importance(
     model_dir: Path = Path.cwd() / f"results/mnist",
     model_name: str = "model",
 ) -> None:
-    device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
+    device = torch.device("cpu")
     torch.manual_seed(random_seed)
 
     if not save_dir.exists():
@@ -405,7 +405,7 @@ def kernel_sensitivity(
     model_dir: Path = Path.cwd() / f"results/mnist/",
     model_name: str = "model",
 ) -> None:
-    device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
+    device = torch.device("cpu")
     torch.manual_seed(random_seeds[0])
 
     if not save_dir.exists():
@@ -493,7 +493,7 @@ def concept_size_impact(
     model_dir: Path = Path.cwd() / f"results/mnist/",
     model_name: str = "model",
 ) -> None:
-    device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
+    device = torch.device("cpu")
     torch.manual_seed(random_seeds[0])
 
     if not save_dir.exists():
@@ -576,7 +576,7 @@ def tcar_inter_concept(
     model_dir: Path = Path.cwd() / f"results/mnist",
     model_name: str = "model",
 ) -> None:
-    device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
+    device = torch.device("cpu")
     torch.manual_seed(random_seed)
 
     if not save_dir.exists():
@@ -636,7 +636,7 @@ def adversarial_robustness(
     model_dir: Path = Path.cwd() / f"results/mnist",
     model_name: str = "model",
 ) -> None:
-    device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
+    device = torch.device("cpu")
     torch.manual_seed(random_seed)
 
     if not save_dir.exists():
@@ -853,8 +853,8 @@ if __name__ == "__main__":
     parser.add_argument("--seeds", nargs="+", type=int, default=list(range(1, 11)))
     parser.add_argument("--batch_size", type=int, default=120)
     parser.add_argument("--latent_dim", type=int, default=5)
-    parser.add_argument("--train", action="store_true")
-    parser.add_argument("--plot", action="store_true")
+    parser.add_argument("--train", action="store_true",default=False)
+    parser.add_argument("--plot", action="store_true",default=True)
     parser.add_argument(
         "--concept_sizes", nargs="+", type=int, default=list(range(10, 310, 30))
     )

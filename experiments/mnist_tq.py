@@ -29,6 +29,26 @@ from sklearn.gaussian_process.kernels import Matern
 from tqdm import tqdm
 from utils.robustness import Attacker
 
+def dm2vec(rho):
+    """
+    把 单个密度矩阵（复数）→ 实数特征向量
+    输入：rho (DensityMatrix 或 np.array)
+    输出：实数一维向量
+    """
+    # 转成 numpy 复数矩阵
+    if hasattr(rho, 'data'):
+        rho = rho.data
+
+    # 实部 + 虚部 拼接（SVM只认实数）
+    real_part = np.real(rho).flatten()
+    imag_part = np.imag(rho).flatten()
+
+    # 合并成一个实数向量
+    feature = np.concatenate([real_part, imag_part])
+
+    # 去掉极小值（避免数值噪声）
+    feature = np.nan_to_num(feature, nan=0, posinf=0, neginf=0)
+    return feature
 
 concept_to_class = {
     "Loop": [0, 2, 6, 8, 9],
@@ -136,10 +156,14 @@ def concept_accuracy(
             cav = CAV(device)
             hook_name = f"{concept_name}_seed{random_seed}_train_{module_name}"
             H_train = get_saved_representations(hook_name, representation_dir)
+            if H_train.dtype == np.complex128:
+                H_train=np.array([dm2vec(dm) for dm in H_train])
             car.fit(H_train, y_train)
             cav.fit(H_train, y_train)
             hook_name = f"{concept_name}_seed{random_seed}_test_{module_name}"
             H_test = get_saved_representations(hook_name, representation_dir)
+            if H_test.dtype == np.complex128:
+                H_test=np.array([dm2vec(dm) for dm in H_test])
             results_data.append(
                 [
                     concept_name,
@@ -213,6 +237,8 @@ def statistical_significance(
             cav = CAV(device)
             hook_name = f"{concept_name}_seed{random_seed}_train_{module_name}"
             H_train = get_saved_representations(hook_name, representation_dir)
+            if H_train.dtype == np.complex128:
+                H_train=np.array([dm2vec(dm) for dm in H_train])
             results_data.append(
                 [
                     concept_name,
@@ -271,14 +297,10 @@ def global_explanations(
         X_train, y_train = generate_mnist_concept_dataset(
             concept_to_class[concept_name], data_dir, True, 200, random_seed
         )
-        H_train = (
-            model.input_to_representation(torch.from_numpy(X_train).to(device))
-            .detach()
-            .cpu()
-            .numpy()
-        )
-        car_classifier.fit(H_train, y_train)
-        cav_classifier.fit(H_train, y_train)
+        H_train = model.input_to_representation(torch.from_numpy(X_train).to(device))
+        h_train = np.array([dm2vec(dm) for dm in H_train])
+        car_classifier.fit(h_train, y_train)
+        cav_classifier.fit(h_train, y_train)
 
     test_set = MNIST(data_dir, train=False, download=True)
     test_set.transform = transforms.Compose([transforms.ToTensor()])
@@ -288,12 +310,13 @@ def global_explanations(
 
     logging.info("Now predicting concepts on the test set")
     for X_test, y_test in tqdm(test_loader, unit="batch", leave=False):
-        H_test = model.input_to_representation(X_test.to(device)).detach().cpu().numpy()
-        car_preds = [car.predict(H_test) for car in car_classifiers]
-        cav_preds = [
-            cav.concept_importance(H_test, y_test, 10, model.representation_to_output)
-            for cav in cav_classifiers
-        ]
+        H_test = model.input_to_representation(X_test.to(device))
+        h_test = np.array([dm2vec(dm) for dm in H_test])
+        car_preds = [car.predict(h_test) for car in car_classifiers]
+        # cav_preds = [
+        #     cav.concept_importance(X_test.to(device), H_test, y_test, 10, model.representation_to_output)
+        #     for cav in cav_classifiers
+        # ]
         targets = [
             [int(label in concept_to_class[concept]) for label in y_test]
             for concept in concept_to_class
@@ -303,10 +326,10 @@ def global_explanations(
             ["TCAR", label.item()] + [int(car_pred[idx]) for car_pred in car_preds]
             for idx, label in enumerate(y_test)
         ]
-        results_data += [
-            ["TCAV", label.item()] + [int(cav_pred[idx] > 0) for cav_pred in cav_preds]
-            for idx, label in enumerate(y_test)
-        ]
+        # results_data += [
+        #     ["TCAV", label.item()] + [int(cav_pred[idx] > 0) for cav_pred in cav_preds]
+        #     for idx, label in enumerate(y_test)
+        # ]
         results_data += [
             ["True Prop.", label.item()] + [target[idx] for target in targets]
             for idx, label in enumerate(y_test)
@@ -359,11 +382,9 @@ def feature_importance(
         )
         H_train = (
             model.input_to_representation(torch.from_numpy(X_train).to(device))
-            .detach()
-            .cpu()
-            .numpy()
         )
-        car.tune_kernel_width(H_train, y_train)
+        h_train = np.array([dm2vec(dm) for dm in H_train])
+        car.tune_kernel_width(h_train, y_train)
         logging.info(
             f"Now computing feature importance on the test set for {concept_name}"
         )
@@ -457,30 +478,26 @@ def kernel_sensitivity(
         )
         H_train = (
             model.input_to_representation(torch.from_numpy(X_train).to(device))
-            .detach()
-            .cpu()
-            .numpy()
         )
+        h_train = np.array([dm2vec(dm) for dm in H_train])
         X_val, C_val = generate_mnist_concept_dataset(
             concept_to_class[concept_name], data_dir, True, 50, random_seed + 1
         )
         H_val = (
             model.input_to_representation(torch.from_numpy(X_val).to(device))
-            .detach()
-            .cpu()
-            .numpy()
         )
+        h_val = np.array([dm2vec(dm) for dm in H_val])
         # Create concept classifiers, fit them and test them
         for kernel_name in cars:
             car = cars[kernel_name]
-            car.fit(H_train, C_train)
+            car.fit(h_train, C_train)
             results_data.append(
                 [
                     "Training",
                     concept_name,
                     random_seed,
                     kernel_name,
-                    accuracy_score(C_train, car.predict(H_train)),
+                    accuracy_score(C_train, car.predict(h_train)),
                 ]
             )
             results_data.append(
@@ -489,7 +506,7 @@ def kernel_sensitivity(
                     concept_name,
                     random_seed,
                     kernel_name,
-                    accuracy_score(C_val, car.predict(H_val)),
+                    accuracy_score(C_val, car.predict(h_val)),
                 ]
             )
 
@@ -534,9 +551,6 @@ def concept_size_impact(
         )
         H_test = (
             model.input_to_representation(torch.from_numpy(X_test).to(device))
-            .detach()
-            .cpu()
-            .numpy()
         )
         # Create concept classifiers, fit them and test them for each representation space
         prev_size = 0
@@ -558,20 +572,18 @@ def concept_size_impact(
             )
             H_add = (
                 model.input_to_representation(torch.from_numpy(X_add).to(device))
-                .detach()
-                .cpu()
-                .numpy()
             )
             C_train = np.concatenate((C_train, C_add), axis=0)
             H_train = np.concatenate((H_train, H_add), axis=0)
             car = CAR(device)
-            car.fit(H_train, C_train)
+            h_train = np.array([dm2vec(dm) for dm in H_train])
+            car.fit(h_train, C_train)
             results_data.append(
                 [
                     concept_size,
                     random_seed,
                     concept_name,
-                    accuracy_score(C_train, car.predict(H_train)),
+                    accuracy_score(C_train, car.predict(h_train)),
                 ]
             )
 
@@ -619,11 +631,9 @@ def tcar_inter_concept(
         )
         H_train = (
             model.input_to_representation(torch.from_numpy(X_train).to(device))
-            .detach()
-            .cpu()
-            .numpy()
         )
-        car_classifier.fit(H_train, y_train)
+        h_train = np.array([dm2vec(dm) for dm in H_train])
+        car_classifier.fit(h_train, y_train)
 
     test_set = MNIST(data_dir, train=False, download=True)
     test_set.transform = transforms.Compose([transforms.ToTensor()])
@@ -633,8 +643,9 @@ def tcar_inter_concept(
 
     logging.info("Now predicting concepts on the test set")
     for X_test, y_test in tqdm(test_loader, unit="batch", leave=False):
-        H_test = model.input_to_representation(X_test.to(device)).detach().cpu().numpy()
-        car_preds = [car.predict(H_test) for car in car_classifiers]
+        H_test = model.input_to_representation(X_test.to(device))
+        h_test = np.array([dm2vec(dm) for dm in H_test])
+        car_preds = [car.predict(h_test) for car in car_classifiers]
         results_data += [
             [int(car_pred[idx]) for car_pred in car_preds] for idx in range(len(y_test))
         ]
@@ -682,12 +693,10 @@ def adversarial_robustness(
         )
         H_train = (
             model.input_to_representation(torch.from_numpy(X_train).to(device))
-            .detach()
-            .cpu()
-            .numpy()
         )
-        car_classifier.fit(H_train, y_train)
-        cav_classifier.fit(H_train, y_train)
+        h_train = np.array([dm2vec(dm) for dm in H_train])
+        car_classifier.fit(h_train, y_train)
+        cav_classifier.fit(h_train, y_train)
 
     test_set = MNIST(data_dir, train=False, download=True)
     test_set.transform = transforms.Compose([transforms.ToTensor()])
@@ -707,15 +716,15 @@ def adversarial_robustness(
                 X_adv = attacker.make_adversarial_example(X_adv, model(X_adv))
             X_test = torch.cat([X_adv, X_test])
             H_test = (
-                model.input_to_representation(X_test.to(device)).detach().cpu().numpy()
+                model.input_to_representation(X_test.to(device))
             )
-            car_preds = [car.predict(H_test) for car in car_classifiers]
-            cav_preds = [
-                cav.concept_importance(
-                    H_test, y_test, 10, model.representation_to_output
-                )
-                for cav in cav_classifiers
-            ]
+            h_test = np.array([dm2vec(dm) for dm in H_test])
+            car_preds = [car.predict(h_test) for car in car_classifiers]
+            # cav_preds = [
+            #     cav.concept_importance(X_test, H_test, y_test, 10, model.representation_to_output
+            #     )
+            #     for cav in cav_classifiers
+            # ]
             targets = [
                 [int(label in concept_to_class[concept]) for label in y_test]
                 for concept in concept_to_class
@@ -726,11 +735,11 @@ def adversarial_robustness(
                 + [int(car_pred[idx]) for car_pred in car_preds]
                 for idx, label in enumerate(y_test)
             ]
-            results_data += [
-                [attack_prop * 100, "TCAV", label.item()]
-                + [int(cav_pred[idx] > 0) for cav_pred in cav_preds]
-                for idx, label in enumerate(y_test)
-            ]
+            # results_data += [
+            #     [attack_prop * 100, "TCAV", label.item()]
+            #     + [int(cav_pred[idx] > 0) for cav_pred in cav_preds]
+            #     for idx, label in enumerate(y_test)
+            # ]
             results_data += [
                 [attack_prop * 100, "True Prop.", label.item()]
                 + [target[idx] for target in targets]
@@ -786,10 +795,13 @@ def adversarial_robustness(
 
 
 def senn() -> None:
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    from pathlib import Path
+    current_file = Path(__file__).absolute()
+    project_root = current_file.parent.parent
+    device = torch.device("cpu")
 
     logging.info("Now fitting SENN model")
-    senn_trainer = init_trainer(str(Path.cwd() / "configs/senn_config.json"))
+    senn_trainer = init_trainer(str(project_root / "configs/senn_config.json"))
     senn_trainer.run()
     senn_trainer.load_checkpoint(
         str(Path.cwd() / "results/mnist/senn/checkpoints/best_model.pt")
@@ -931,13 +943,14 @@ if __name__ == "__main__":
     #     senn()
     # else:
     #     raise ValueError(f"{args.name} is not a valid experiment name")
-    train_mnist_model(args.latent_dim, args.batch_size, model_name=model_name)
-    concept_accuracy(args.seeds, args.latent_dim, args.plot, model_name=model_name)
-    global_explanations(args.seeds[0],args.batch_size,args.latent_dim,args.plot,model_name=model_name,)
-    statistical_significance(args.seeds[0], args.latent_dim, model_name=model_name)
-    feature_importance(args.seeds[0],args.batch_size,args.latent_dim,args.plot,model_name=model_name,)
-    kernel_sensitivity(args.seeds, args.latent_dim, args.plot, model_name=model_name)
+    # train_mnist_model(args.latent_dim, args.batch_size, model_name=model_name)
+    # concept_accuracy(args.seeds, args.latent_dim, args.plot, model_name=model_name)
+    # global_explanations(args.seeds[0],args.batch_size,args.latent_dim,args.plot,model_name=model_name,)
+    # statistical_significance(args.seeds[0], args.latent_dim, model_name=model_name)
+    # feature_importance(args.seeds[0],args.batch_size,args.latent_dim,args.plot,model_name=model_name,)
+    # kernel_sensitivity(args.seeds, args.latent_dim, args.plot, model_name=model_name)
     concept_size_impact(args.seeds,args.latent_dim,args.concept_sizes,args.plot,model_name=model_name,)
     tcar_inter_concept(args.seeds[0],args.batch_size,args.latent_dim,args.plot,model_name=model_name,)
     adversarial_robustness(args.seeds[0], args.batch_size, args.latent_dim, model_name=model_name)
+    senn()
 

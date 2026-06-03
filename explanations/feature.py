@@ -4,7 +4,26 @@ from tqdm import tqdm
 from captum import attr
 from explanations.concept import ConceptExplainer
 from torch.utils.data import DataLoader
+def dm2vec(rho):
+    """
+    把 单个密度矩阵（复数）→ 实数特征向量
+    输入：rho (DensityMatrix 或 np.array)
+    输出：实数一维向量
+    """
+    # 转成 numpy 复数矩阵
+    if hasattr(rho, 'data'):
+        rho = rho.data
 
+    # 实部 + 虚部 拼接（SVM只认实数）
+    real_part = np.real(rho).flatten()
+    imag_part = np.imag(rho).flatten()
+
+    # 合并成一个实数向量
+    feature = np.concatenate([real_part, imag_part])
+
+    # 去掉极小值（避免数值噪声）
+    feature = np.nan_to_num(feature, nan=0, posinf=0, neginf=0)
+    return feature
 
 class CARFeatureImportance:
     def __init__(
@@ -59,6 +78,7 @@ class CARFeatureImportance:
     def concept_importance(self, input_features: torch.tensor) -> torch.Tensor:
         input_features = input_features.to(self.device)
         latent_reps = self.black_box.input_to_representation(input_features)
+        # latent_reps = np.array([dm2vec(dm) for dm in latent_reps])
         return self.concept_explainer.concept_importance(latent_reps)
 
 

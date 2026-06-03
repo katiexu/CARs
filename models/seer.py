@@ -12,8 +12,9 @@ class SEERClassifier(nn.Module):
         super(SEERClassifier, self).__init__()
         self.latent_dim = latent_dim
         self.name = name
-        self.fc1 = nn.Linear(22, 4 * self.latent_dim)
-        self.fc2 = nn.Linear(4 * self.latent_dim, self.latent_dim)
+        self.fc1 = nn.Linear(25, 4 * self.latent_dim)
+        self.fc2 = nn.Linear(4 * self.latent_dim, 2*self.latent_dim)
+        self.fc3 = nn.Linear(2 * self.latent_dim, self.latent_dim)
         self.out = nn.Linear(self.latent_dim, 2)
         self.checkpoints_files = []
         self.relu = nn.ReLU()
@@ -27,6 +28,9 @@ class SEERClassifier(nn.Module):
         x = self.fc2(x)
         x = self.relu(x)
         x = self.dropout(x)
+        x = self.fc3(x)
+        x = self.relu(x)
+        x = self.dropout(x)
         x = self.out(x)
         return x
 
@@ -35,6 +39,9 @@ class SEERClassifier(nn.Module):
         x = self.relu(x)
         x = self.dropout(x)
         x = self.fc2(x)
+        x = self.relu(x)
+        x = self.dropout(x)
+        x = self.fc3(x)
         return x
 
     def representation_to_output(self, h):
@@ -180,3 +187,6 @@ class SEERClassifier(nn.Module):
         """
         path_to_model = directory / (self.name + ".pt")
         torch.save(self.state_dict(), path_to_model)
+
+
+

@@ -12,6 +12,13 @@ from torchquantum.encoding import encoder_op_list_name_dict
 import numpy as np
 from Arguments import Arguments
 
+from qiskit import QuantumCircuit, transpile
+from qiskit.quantum_info import SparsePauliOp, DensityMatrix
+from qiskit.providers.fake_provider import GenericBackendV2
+from qiskit_aer.noise import NoiseModel
+from qiskit_aer.primitives import Estimator
+from qiskit.circuit import ParameterVector
+
 # Qiskit imports
 from math import pi
 import os
@@ -297,15 +304,10 @@ class TQLayer(tq.QuantumModule):
 
     def forward(self, x):
         bsz = x.shape[0]
-
-        x = x.unsqueeze(1)  # 增加通道维度
-        x = self.conv1d(x)
-        x = x.view(bsz,4,4)
-
+        x = x.view(bsz,6,4)
 
         qdev = tq.QuantumDevice(n_wires=self.n_wires, bsz=bsz, device=x.device)
 
-        
         for i in range(len(self.design)):
             if self.design[i][0] == 'U3':                
                 layer = self.design[i][2]
@@ -323,6 +325,260 @@ class TQLayer(tq.QuantumModule):
         out = self.measure(qdev)
         return out
 
+
+class EstimatorQiskitLayer(nn.Module):
+    SEED = 170
+
+    def __init__(self, arguments, design, shots=10000):
+        super().__init__()
+        self.args = arguments
+        self.design = design
+        self.n_qubits = self.args.n_qubits
+        self.n_layers = self.args.n_layers
+        self.shots = shots
+
+        # Trainable parameters with identical structure to other layers
+        self.q_params_rot = nn.Parameter(pi * torch.rand(self.n_layers, self.n_qubits, 3), requires_grad=True)
+        self.q_params_enta = nn.Parameter(pi * torch.rand(self.n_layers, self.n_qubits, 3), requires_grad=True)
+
+        # Reuse original circuit construction logic to ensure consistent structure
+        self.qc_template, self.data_params, self.u3_param_map, self.cu3_param_map = self._build_parametric_circuit()
+        self.observables = self._prebuild_observables()
+
+        # Initialize backend and noise model from the same chip config.
+        self._init_backend_and_noisemodel(arguments.name)
+        self._init_estimator()
+
+    def _init_backend_and_noisemodel(self, name):
+        from qiskit_ibm_runtime.fake_provider import FakeKyoto, FakeBelemV2, FakeTorontoV2, FakeYorktownV2
+        if self.args.noise:
+            if 'kyoto' in name:
+                self.noise_model = NoiseModel.from_backend(FakeKyoto())
+            elif 'toronto' in name:
+                self.noise_model = NoiseModel.from_backend(FakeTorontoV2())
+            elif 'belem' in name:
+                self.noise_model = NoiseModel.from_backend(FakeBelemV2())
+            elif 'yorktown' in name:
+                self.noise_model = NoiseModel.from_backend(FakeYorktownV2())
+            else:
+                self.noise_model = None
+        else:
+            self.noise_model = None
+
+    def _init_estimator(self):
+        """Initialize noise-free Estimator compatible with GenericBackendV2"""
+        self.estimator = Estimator(
+            backend_options={
+                "noise_model": self.noise_model,
+                "shots": self.shots,
+                "seed_simulator": self.SEED,
+                "method": "density_matrix"
+            },
+            transpile_options={
+                "seed_transpiler": self.SEED,
+                "optimization_level": 1,  # 0~3，建议1或2
+                "initial_layout": list(range(self.n_qubits)),  # 固定物理比特（核心！）
+                "routing_method": "sabre"  # 有拓扑时用
+            }
+        )
+
+    def _build_parametric_circuit(self, n_layers=None):
+        """Construct parametric quantum circuit with consistent structure"""
+        qc = QuantumCircuit(self.n_qubits)
+        data_params = []
+        u3_param_map = {}
+        cu3_param_map = {}
+
+        for j in range(self.n_qubits):
+            qubit_data_params = ParameterVector(f'data_q{j}', length=4)
+            data_params.append(qubit_data_params)
+
+        for i in tqdm(range(len(self.design)), desc="Building Circuit"):
+            elem = self.design[i]
+            # If n_layers is specified, only include gates from layers < n_layers
+            if n_layers is not None and elem[2] >= n_layers:
+                continue
+
+            if elem[0] == 'U3':
+                layer = elem[2]
+                qubit = elem[1][0]
+                param_key = (layer, qubit)
+                if param_key not in u3_param_map:
+                    u3_params = ParameterVector(f'u3_l{layer}q{qubit}', length=3)
+                    u3_param_map[param_key] = u3_params
+                theta, phi, lam = u3_param_map[param_key]
+                qc.u(theta, phi, lam, qubit)
+            elif elem[0] == 'C(U3)':
+                layer = elem[2]
+                control_qubit = elem[1][0]
+                target_qubit = elem[1][1]
+                param_key = (layer, control_qubit)
+                if param_key not in cu3_param_map:
+                    cu3_params = ParameterVector(f'cu3_l{layer}cq{control_qubit}', length=3)
+                    cu3_param_map[param_key] = cu3_params
+                theta, phi, lam = cu3_param_map[param_key]
+                qc.cu(theta, phi, lam, 0, control_qubit, target_qubit)
+            else:
+                j = int(elem[1][0])
+                qc.ry(data_params[j][0], j)
+                qc.rz(data_params[j][1], j)
+                qc.rx(data_params[j][2], j)
+                qc.ry(data_params[j][3], j)
+        return qc, data_params, u3_param_map, cu3_param_map
+
+    def _prebuild_observables(self):
+        """Pre-build Pauli observables for expectation value calculation"""
+        observables = []
+        for q in range(self.n_qubits):
+            pauli_str = 'I' * q + 'Z' + 'I' * (self.n_qubits - q - 1)
+            observable = SparsePauliOp.from_list([(pauli_str, 1.0)])
+            observables.append(observable)
+        return observables
+
+    def _preprocess_x(self, x):
+        """Preprocess input data following the original pipeline"""
+        bsz = x.shape[0]
+        x = x.unsqueeze(1)  # 增加通道维度
+        x = x.view(bsz, 6, 4)
+        return x
+
+    def create_pauli_observables(self, physical_qubit_indices):
+        """
+        Create Pauli-Z observables based on physical qubit mapping
+        physical_qubit_indices = [0, 1, 3, 2] means:
+            - Logical qubit 0 maps to physical qubit 0 -> 'ZIII'
+            - Logical qubit 1 maps to physical qubit 1 -> 'IZII'
+            - Logical qubit 2 maps to physical qubit 3 -> 'IIIZ'
+            - Logical qubit 3 maps to physical qubit 2 -> 'IIZI'
+        """
+        observables = []
+        total_qubits = len(physical_qubit_indices)
+
+        for i, physical_qubit_idx in enumerate(physical_qubit_indices):
+            # 正确、通用、支持任意比特数的写法
+            pauli_list = ['I'] * total_qubits
+            pauli_list[physical_qubit_idx] = 'Z'
+            pauli_str = ''.join(pauli_list)
+            observable = SparsePauliOp.from_list([(pauli_str, 1.0)])
+            observables.append(observable)
+
+        return observables
+
+    def forward(self, x):
+        """Forward pass with fine-grained per-sample timing"""
+        device = x.device
+        x_pre = self._preprocess_x(x)
+        bsz = x_pre.shape[0]
+
+        x_np = x_pre.detach().cpu().numpy()
+        u3_np = self.q_params_rot.detach().cpu().numpy()
+        cu3_np = self.q_params_enta.detach().cpu().numpy()
+
+        # 预构建observable
+        if self.args.task.startswith('QML'):
+            observables_list = self.observables[-2:]
+        else:
+            observables_list = self.observables
+
+        batch_results = []
+
+        # �� 创建样本级进度条（每个样本单独计时）
+        for batch_idx in tqdm(range(bsz), desc="Running Estimator",
+                              unit="sample", ncols=100):
+            # 单样本参数绑定
+            param_bind = {}
+            for j in range(self.n_qubits):
+                param_bind[self.data_params[j]] = x_np[batch_idx, j]
+            for (layer, q), params in self.u3_param_map.items():
+                param_bind[params] = u3_np[layer, q]
+            for (layer, cq), params in self.cu3_param_map.items():
+                param_bind[params] = cu3_np[layer, cq]
+
+            # 绑定参数生成电路
+            qc = self.qc_template.assign_parameters(param_bind)
+
+            # 批量运行所有observables（对当前样本）
+            job = self.estimator.run([qc] * len(observables_list), observables_list)
+            exp_vals = job.result().values
+
+            # 反向排列并存储
+            exp_vals = exp_vals[::-1]
+            batch_results.append(exp_vals)
+
+        # 转换为张量
+        output = torch.tensor(batch_results, dtype=torch.float32, device=device)
+        return output
+
+    def forward_n(self, x, n):
+        """
+        输入 input 和一个数字 n，输出 input 经过量子网络第 n 层后的密度矩阵。
+        n 从 1 开始计数。
+        """
+        device = x.device
+        x_pre = self._preprocess_x(x)
+        bsz = x_pre.shape[0]
+
+        x_np = x_pre.detach().cpu().numpy()
+        u3_np = self.q_params_rot.detach().cpu().numpy()
+        cu3_np = self.q_params_enta.detach().cpu().numpy()
+
+        # 使用修改后的 _build_parametric_circuit 构建截断的模板电路
+        # n 从 1 开始，对应 layer < n
+        qc_template_n, data_params_n, u3_param_map_n, cu3_param_map_n = self._build_parametric_circuit(n_layers=n)
+
+        # 在模板上添加 save_density_matrix
+        qc_template_n.save_density_matrix()
+
+        # 获取 qiskit-aer 的 AerSimulator 来获取密度矩阵
+        from qiskit_aer import AerSimulator
+        backend = AerSimulator(method='density_matrix', noise_model=self.noise_model, seed_simulator=self.SEED)
+
+        # 保持与 _init_estimator 一致的编译选项
+        transpile_options = {
+            "seed_transpiler": self.SEED,
+            "optimization_level": 1,
+            "initial_layout": list(range(self.n_qubits)),
+            "routing_method": "sabre"
+        }
+
+        # 1. 优化点：将 transpile 移出循环。只编译一次模板电路。
+        # 注意：transpile 会将 Parameter 对象保留在编译后的电路中。
+        compiled_template = transpile(qc_template_n, backend, **transpile_options)
+
+        all_qcs = []
+        for batch_idx in range(bsz):
+            # 单样本参数绑定
+            param_bind = {}
+            for j in range(self.n_qubits):
+                param_bind[data_params_n[j]] = x_np[batch_idx, j]
+            for (layer, q), params in u3_param_map_n.items():
+                param_bind[params] = u3_np[layer, q]
+            for (layer, cq), params in cu3_param_map_n.items():
+                param_bind[params] = cu3_np[layer, cq]
+
+            # 2. 仅绑定参数，无需重新编译
+            qc_filled = compiled_template.assign_parameters(param_bind)
+            all_qcs.append(qc_filled)
+
+        # 3. 优化点：利用 Qiskit 批处理 (Batching)，一次性提交所有计算
+        job = backend.run(all_qcs)
+        result = job.result()
+
+        batch_density_matrices = []
+        if bsz == 1:
+            # 单个样本时 result.data() 返回字典
+            dm = result.data()['density_matrix']
+            batch_density_matrices.append(dm.data)
+        else:
+            # 多个样本时使用 result.data(i) 获取第 i 个结果
+            for i in range(bsz):
+                dm = result.data(i)['density_matrix']
+                batch_density_matrices.append(dm.data)
+
+        # 转换为 torch 张量
+        output = torch.tensor(np.array(batch_density_matrices), device=device)
+        return output
+
 class QNet(nn.Module):
     def __init__(self, arguments, design):
         super(QNet, self).__init__()
@@ -330,14 +586,16 @@ class QNet(nn.Module):
         self.design = design
         self.QuantumLayer = TQLayer(self.args, self.design)
         self.criterion = nn.CrossEntropyLoss()
-
+        self.fc=nn.Linear(25,24)
 
     def forward(self, x):
+        x=self.fc(x)
         exp_val = self.QuantumLayer(x)
         output = F.log_softmax(exp_val, dim=1)
         return output
     def input_to_representation(self, x):
-        return self.forward(x)
+        x = self.fc(x)
+        return self.QuantumLayer(x)
     def train_epoch(
         self,
         device: torch.device,

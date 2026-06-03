@@ -48,11 +48,14 @@ def plot_global_explanation(results_dir: Path, dataset_name: str, concept_catego
     tcar_scores = plot_df.loc[plot_df.Method == "TCAR"]["Score"]
     tcav_scores = plot_df.loc[plot_df.Method == "TCAV"]["Score"]
     true_scores = plot_df.loc[plot_df.Method == "True Prop."]["Score"]
-    logging.info(f"TCAR-True Prop. Correlation: {np.corrcoef(tcar_scores, true_scores)[0, 1]:.2g}")
+    if not tcar_scores.empty and not true_scores.empty:
+        logging.info(f"TCAR-True Prop. Correlation: {np.corrcoef(tcar_scores, true_scores)[0, 1]:.2g}")
     if "TCAR Sensitivity" in methods:
         tcar_sensitivity_scores = plot_df.loc[plot_df.Method == "TCAR Sensitivity"]["Score"]
-        logging.info(f"TCAR_Sensitivity-True Prop. Correlation: {np.corrcoef(tcar_sensitivity_scores, true_scores)[0, 1]:.2g}")
-    logging.info(f"TCAV-True Prop. Correlation: {np.corrcoef(tcav_scores, true_scores)[0, 1]:.2g}")
+        if not tcar_sensitivity_scores.empty and not true_scores.empty:
+            logging.info(f"TCAR_Sensitivity-True Prop. Correlation: {np.corrcoef(tcar_sensitivity_scores, true_scores)[0, 1]:.2g}")
+    if not tcav_scores.empty and not true_scores.empty:
+        logging.info(f"TCAV-True Prop. Correlation: {np.corrcoef(tcav_scores, true_scores)[0, 1]:.2g}")
     if concept_categories is not None:
         for class_idx, concept_category in itertools.product(classes, concept_categories):
             save_dir = results_dir/concept_category.lower().replace(" ", "-")
@@ -89,7 +92,7 @@ def plot_seer_global_explanation(results_dir: Path) -> None:
     metrics_df = pd.read_csv(results_dir / "metrics.csv")
     concepts = list(metrics_df.columns[2:])
     methods = metrics_df["Method"].unique()
-    classes_dic = {0: "Survives", 1: "Dies"}
+    classes_dic = {1: "Survives", 0: "Dies"}
     plot_data = []
     for class_idx, concept, method in itertools.product(classes_dic, concepts, methods):
         attr = np.array(metrics_df.loc[(metrics_df.Class == class_idx) & (metrics_df.Method == method)][concept])
@@ -301,7 +304,7 @@ if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
     parser = argparse.ArgumentParser()
     parser.add_argument("--name", type=str, default="concept_accuracy")
-    parser.add_argument("--dataset", type=str, default="mnist")
+    parser.add_argument("--dataset", type=str, default="seer")
     parser.add_argument("--concept", type=str, default=None)
     args = parser.parse_args()
     save_path = Path.cwd()/f"results/{args.dataset}/{args.name}"

@@ -105,6 +105,7 @@ def concept_accuracy(
         car.fit(H_train, C_train.numpy())
         cav = cav_classifiers[concept_id]
         cav.fit(H_train, C_train.numpy())
+
         X_test, C_test = generate_seer_concept_dataset(
             test_data, concept_id, 50, random_seed
         )
@@ -169,7 +170,7 @@ def global_explanations(
     model.load_state_dict(torch.load(model_dir / f"{model_name}.pt"), strict=False)
     model.to(device)
 
-    car_classifiers = [CAR(device, batch_size, kernel="linear") for _ in range(5)]
+    car_classifiers = [CAR(device, batch_size) for _ in range(5)]
     for concept_id in range(5):
         logging.info(f"Now fitting a CAR classifier for Grade {concept_id+1} patients")
         X_train, C_train = generate_seer_concept_dataset(
@@ -241,7 +242,7 @@ def feature_importance(
     model.to(device)
 
     results_data = []
-    baselines = torch.zeros((1, 22)).to(device)
+    baselines = torch.zeros((1, 25)).to(device)
     for concept_id in range(5):
         logging.info(f"Now fitting a CAR classifier for Grade {concept_id+1} patients")
         X_train, C_train = generate_seer_concept_dataset(
@@ -288,35 +289,39 @@ if __name__ == "__main__":
         level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
     )
     parser = argparse.ArgumentParser()
-    parser.add_argument("--name", type=str, default="global_explanations")
+    parser.add_argument("--name", type=str, default="feature_importance")
     parser.add_argument("--seeds", nargs="+", type=int, default=list(range(1, 11)))
     parser.add_argument("--batch_size", type=int, default=500)
-    parser.add_argument("--latent_dim", type=int, default=100)
-    parser.add_argument("--train", action="store_true",default=False)
+    parser.add_argument("--latent_dim", type=int, default=50)
+    parser.add_argument("--train", action="store_true",default=True)
     parser.add_argument("--plot", action="store_true",default=True)
     args = parser.parse_args()
 
     model_name = f"model_{args.latent_dim}"
-    if args.train:
-        train_model(args.seeds[0], args.batch_size, args.latent_dim, model_name)
-
-    if args.name == "concept_accuracy":
-        concept_accuracy(
-            args.seeds[0], args.batch_size, args.latent_dim, model_name=model_name
-        )
-    elif args.name == "global_explanations":
-        global_explanations(
-            args.seeds[0],
-            args.batch_size,
-            args.latent_dim,
-            args.plot,
-            model_name=model_name,
-        )
-    elif args.name == "feature_importance":
-        feature_importance(
-            args.seeds[0],
-            args.batch_size,
-            args.latent_dim,
-            args.plot,
-            model_name=model_name,
-        )
+    # if args.train:
+    #     train_model(args.seeds[0], args.batch_size, args.latent_dim, model_name)
+    #
+    # if args.name == "concept_accuracy":
+    #     concept_accuracy(
+    #         args.seeds[0], args.batch_size, args.latent_dim, model_name=model_name
+    #     )
+    # elif args.name == "global_explanations":
+    #     global_explanations(
+    #         args.seeds[0],
+    #         args.batch_size,
+    #         args.latent_dim,
+    #         args.plot,
+    #         model_name=model_name,
+    #     )
+    # elif args.name == "feature_importance":
+    #     feature_importance(
+    #         args.seeds[0],
+    #         args.batch_size,
+    #         args.latent_dim,
+    #         args.plot,
+    #         model_name=model_name,
+    #     )
+    train_model(args.seeds[0], args.batch_size, args.latent_dim, model_name)
+    # concept_accuracy(args.seeds[0], args.batch_size, args.latent_dim, model_name=model_name)
+    global_explanations(args.seeds[0],args.batch_size,args.latent_dim,args.plot,model_name=model_name,)
+    # feature_importance(args.seeds[0],args.batch_size,args.latent_dim,args.plot,model_name=model_name,)
