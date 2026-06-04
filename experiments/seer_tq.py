@@ -24,7 +24,7 @@ n_layers = myargs.n_layers
 n_qubits = myargs.n_qubits
 single = [[i]+[1]*2*n_layers for i in range(1,n_qubits+1)]
 enta = [[i]+[i+1]*n_layers for i in range(1,n_qubits)]+[[n_qubits]+[1]*n_layers]
-arch_code = [myargs.n_qubits, myargs.n_layers]  # [4,4]
+arch_code = [myargs.n_qubits, myargs.n_layers]  # [6,4]
 design = single_enta_to_design(single, enta, arch_code)
 
 
@@ -255,7 +255,7 @@ def feature_importance(
     model.to(device)
 
     results_data = []
-    baselines = torch.zeros((1, 22)).to(device)
+    baselines = torch.zeros((1, 25)).to(device)
     for concept_id in range(5):
         logging.info(f"Now fitting a CAR classifier for Grade {concept_id+1} patients")
         X_train, C_train = generate_seer_concept_dataset(
@@ -338,17 +338,5 @@ if __name__ == "__main__":
     # concept_accuracy(
     #     args.seeds[0], args.batch_size, args.latent_dim, model_name=model_name
     # )
-    global_explanations(
-        args.seeds[0],
-        args.batch_size,
-        args.latent_dim,
-        args.plot,
-        model_name=model_name,
-    )
-    # feature_importance(
-    #     args.seeds[0],
-    #     args.batch_size,
-    #     args.latent_dim,
-    #     args.plot,
-    #     model_name=model_name,
-    # )
+    global_explanations(args.seeds[0], args.batch_size, args.latent_dim, args.plot, model_name=model_name,)
+    # feature_importance(args.seeds[0],args.batch_size,args.latent_dim,args.plot,model_name=model_name,)
