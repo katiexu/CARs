@@ -363,17 +363,29 @@ class CAV(ConceptExplainer, ABC):
             concepts scores for each example
         """
         one_hot_labels = F.one_hot(labels, num_classes).to(self.device)
-        latent_reps = torch.from_numpy(latent_reps).to(self.device).requires_grad_()
+        if isinstance(latent_reps, np.ndarray):
+            latent_reps = torch.from_numpy(latent_reps).to(self.device).requires_grad_()
         outputs = rep_to_output(latent_reps, X_test)
         grads = torch.autograd.grad(outputs, latent_reps, grad_outputs=one_hot_labels)[
             0
         ]
         cav = self.get_activation_vector()
-        if len(grads.shape) > 2:
+        # 概念分类器是在 dm2vec(密度矩阵) 的实数空间(=[实部, 虚部])里拟合的，
+        # 这里 grads 是复数密度矩阵的梯度，必须按同样方式展开成 [Re, Im]，
+        # 才能和 cav 的维度对齐（256 复数 -> 512 实数）。
+        if torch.is_complex(grads):
+            grads = torch.cat(
+                [
+                    grads.real.flatten(start_dim=1),
+                    grads.imag.flatten(start_dim=1),
+                ],
+                dim=1,
+            )
+        elif len(grads.shape) > 2:
             grads = grads.flatten(start_dim=1)
-        if len(cav.shape) > 2:
-            cav = cav.flatten(start_dim=1)
-        return torch.einsum("bi,bi->b", cav, grads).detach().cpu().numpy()
+        # cav 是单一概念方向 (1, dim)，用 "i,bi->b" 与每个样本做内积，避免 batch 维(1 vs 120)冲突
+        cav = cav.reshape(-1)
+        return torch.einsum("i,bi->b", cav, grads).detach().cpu().numpy()
 
     def permutation_test(
         self,

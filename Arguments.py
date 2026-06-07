@@ -45,7 +45,9 @@ class Arguments:
 
 
         if task == ('MNIST_10' or 'FASHION_10'):
-            self.n_qubits   = n_qubits
+            self.n_qubits   = 4
+            self.n_layers = 4
+            self.represent_n = 3
             
             self.epochs     = 1
             self.batch_size = 256 

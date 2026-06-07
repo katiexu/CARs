@@ -64,18 +64,14 @@ torch.manual_seed(42)
 np.random.seed(42)
 
 # 2. 初始化参数和设计（使用你指定的single_code/enta_code）
-myargs = Arguments()
-# 你指定的配置
-single_code = [[1, 1, 1, 1, 1, 1, 1, 1, 1],
-               [2, 1, 1, 1, 1, 1, 1, 1, 1],
-               [3, 1, 1, 1, 1, 1, 1, 1, 1],
-               [4, 1, 1, 1, 1, 1, 1, 1, 1]]
-enta_code = [[1, 2, 2, 2, 2],
-             [2, 3, 3, 3, 3],
-             [3, 4, 4, 4, 4],
-             [4, 1, 1, 1, 1]]
-arch_code = [myargs.n_qubits, myargs.n_layers]  # [4,4]
-design = single_enta_to_design(single_code, enta_code, arch_code)
+myargs = Arguments(task='MNIST_10')
+
+n_layers = myargs.n_layers
+n_qubits = myargs.n_qubits
+single = [[i]+[1]*2*n_layers for i in range(1,n_qubits+1)]
+enta = [[i]+[i+1]*n_layers for i in range(1,n_qubits)]+[[n_qubits]+[1]*n_layers]
+arch_code = [myargs.n_qubits, myargs.n_layers]
+design = single_enta_to_design(single, enta, arch_code)
 
 def train_mnist_model(
     latent_dim: int,
@@ -102,7 +98,12 @@ def train_mnist_model(
     test_loader = torch.utils.data.DataLoader(
         test_set, batch_size=batch_size, shuffle=False
     )
-    model.fit(device, train_loader, test_loader, model_dir)
+    try:
+        model.load_state_dict(torch.load(model_dir / f"vqc_model.pt"), strict=False)
+        print("load success")
+    except:
+        pass
+    model.fit(device, train_loader, test_loader, model_dir, n_epoch=500, patience=50)
 
 
 def concept_accuracy(
@@ -156,13 +157,13 @@ def concept_accuracy(
             cav = CAV(device)
             hook_name = f"{concept_name}_seed{random_seed}_train_{module_name}"
             H_train = get_saved_representations(hook_name, representation_dir)
-            if H_train.dtype == np.complex128:
+            if H_train.dtype == np.complex64:
                 H_train=np.array([dm2vec(dm) for dm in H_train])
             car.fit(H_train, y_train)
             cav.fit(H_train, y_train)
             hook_name = f"{concept_name}_seed{random_seed}_test_{module_name}"
             H_test = get_saved_representations(hook_name, representation_dir)
-            if H_test.dtype == np.complex128:
+            if H_test.dtype == np.complex64:
                 H_test=np.array([dm2vec(dm) for dm in H_test])
             results_data.append(
                 [
@@ -237,7 +238,7 @@ def statistical_significance(
             cav = CAV(device)
             hook_name = f"{concept_name}_seed{random_seed}_train_{module_name}"
             H_train = get_saved_representations(hook_name, representation_dir)
-            if H_train.dtype == np.complex128:
+            if H_train.dtype == np.complex64:
                 H_train=np.array([dm2vec(dm) for dm in H_train])
             results_data.append(
                 [
@@ -313,10 +314,10 @@ def global_explanations(
         H_test = model.input_to_representation(X_test.to(device))
         h_test = np.array([dm2vec(dm) for dm in H_test])
         car_preds = [car.predict(h_test) for car in car_classifiers]
-        # cav_preds = [
-        #     cav.concept_importance(X_test.to(device), H_test, y_test, 10, model.representation_to_output)
-        #     for cav in cav_classifiers
-        # ]
+        cav_preds = [
+            cav.concept_importance(X_test.to(device), H_test, y_test, 10, model.representation_to_output)
+            for cav in cav_classifiers
+        ]
         targets = [
             [int(label in concept_to_class[concept]) for label in y_test]
             for concept in concept_to_class
@@ -326,10 +327,10 @@ def global_explanations(
             ["TCAR", label.item()] + [int(car_pred[idx]) for car_pred in car_preds]
             for idx, label in enumerate(y_test)
         ]
-        # results_data += [
-        #     ["TCAV", label.item()] + [int(cav_pred[idx] > 0) for cav_pred in cav_preds]
-        #     for idx, label in enumerate(y_test)
-        # ]
+        results_data += [
+            ["TCAV", label.item()] + [int(cav_pred[idx] > 0) for cav_pred in cav_preds]
+            for idx, label in enumerate(y_test)
+        ]
         results_data += [
             ["True Prop.", label.item()] + [target[idx] for target in targets]
             for idx, label in enumerate(y_test)
@@ -552,11 +553,16 @@ def concept_size_impact(
         H_test = (
             model.input_to_representation(torch.from_numpy(X_test).to(device))
         )
+        # Vectorize the (complex) density matrices into real feature vectors,
+        # exactly like every other experiment does before fitting a classifier.
+        h_test = np.array([dm2vec(dm) for dm in H_test])
         # Create concept classifiers, fit them and test them for each representation space
         prev_size = 0
         concept_sizes.sort()
-        C_train = np.empty([1], dtype=int)
-        H_train = np.empty([1] + list(H_test.shape[1:]))
+        # Start with empty (0-row) accumulators that share the feature dimension
+        # of the vectorized representations, so concatenation stays 2-dimensional.
+        C_train = np.empty([0], dtype=int)
+        H_train = np.empty([0, h_test.shape[1]])
         for concept_size in concept_sizes:
             logging.info(
                 f"Working with concept {concept_name}, seed {random_seed} and a set of size {concept_size}"
@@ -573,17 +579,18 @@ def concept_size_impact(
             H_add = (
                 model.input_to_representation(torch.from_numpy(X_add).to(device))
             )
+            h_add = np.array([dm2vec(dm) for dm in H_add])
             C_train = np.concatenate((C_train, C_add), axis=0)
-            H_train = np.concatenate((H_train, H_add), axis=0)
+            H_train = np.concatenate((H_train, h_add), axis=0)
             car = CAR(device)
-            h_train = np.array([dm2vec(dm) for dm in H_train])
-            car.fit(h_train, C_train)
+
+            car.fit(H_train, C_train)
             results_data.append(
                 [
                     concept_size,
                     random_seed,
                     concept_name,
-                    accuracy_score(C_train, car.predict(h_train)),
+                    accuracy_score(C_train, car.predict(H_train)),
                 ]
             )
 
@@ -720,11 +727,11 @@ def adversarial_robustness(
             )
             h_test = np.array([dm2vec(dm) for dm in H_test])
             car_preds = [car.predict(h_test) for car in car_classifiers]
-            # cav_preds = [
-            #     cav.concept_importance(X_test, H_test, y_test, 10, model.representation_to_output
-            #     )
-            #     for cav in cav_classifiers
-            # ]
+            cav_preds = [
+                cav.concept_importance(X_test, H_test, y_test, 10, model.representation_to_output
+                )
+                for cav in cav_classifiers
+            ]
             targets = [
                 [int(label in concept_to_class[concept]) for label in y_test]
                 for concept in concept_to_class
@@ -735,11 +742,11 @@ def adversarial_robustness(
                 + [int(car_pred[idx]) for car_pred in car_preds]
                 for idx, label in enumerate(y_test)
             ]
-            # results_data += [
-            #     [attack_prop * 100, "TCAV", label.item()]
-            #     + [int(cav_pred[idx] > 0) for cav_pred in cav_preds]
-            #     for idx, label in enumerate(y_test)
-            # ]
+            results_data += [
+                [attack_prop * 100, "TCAV", label.item()]
+                + [int(cav_pred[idx] > 0) for cav_pred in cav_preds]
+                for idx, label in enumerate(y_test)
+            ]
             results_data += [
                 [attack_prop * 100, "True Prop.", label.item()]
                 + [target[idx] for target in targets]

@@ -29,6 +29,7 @@ class SEERClassifier(nn.Module):
         x = self.relu(x)
         x = self.dropout(x)
         x = self.fc3(x)
+
         x = self.relu(x)
         x = self.dropout(x)
         x = self.out(x)

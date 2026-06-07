@@ -614,7 +614,7 @@ class QNet(nn.Module):
         super(QNet, self).__init__()
         self.args = arguments
         self.design = design
-        self.QuantumLayer = EstimatorQiskitLayer(self.args, self.design)
+        self.QuantumLayer = TQLayer(self.args, self.design)
         self.criterion = nn.CrossEntropyLoss()
         self.fc=nn.Linear(25,24)
 

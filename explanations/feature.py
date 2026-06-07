@@ -78,7 +78,19 @@ class CARFeatureImportance:
     def concept_importance(self, input_features: torch.tensor) -> torch.Tensor:
         input_features = input_features.to(self.device)
         latent_reps = self.black_box.input_to_representation(input_features)
-        # latent_reps = np.array([dm2vec(dm) for dm in latent_reps])
+        # The black box returns (complex) density matrices of shape
+        # (bsz, dim, dim). The CAR classifier was fitted on the real feature
+        # vectors produced by `dm2vec` (real part flattened, then imaginary
+        # part flattened and concatenated). We reproduce the exact same
+        # transformation here, but using differentiable torch operations so
+        # that Integrated Gradients can still back-propagate through it.
+        bsz = latent_reps.shape[0]
+        if torch.is_complex(latent_reps):
+            real_part = latent_reps.real.reshape(bsz, -1)
+            imag_part = latent_reps.imag.reshape(bsz, -1)
+            latent_reps = torch.cat([real_part, imag_part], dim=1)
+        else:
+            latent_reps = latent_reps.reshape(bsz, -1)
         return self.concept_explainer.concept_importance(latent_reps)
 
 
