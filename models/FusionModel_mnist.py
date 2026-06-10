@@ -234,8 +234,6 @@ class TQLayer(tq.QuantumModule):
             else:  # data uploading: if op[0] == 'data'
                 j = int(op[1][0])
                 self.uploading[j](qdev, x[:, j])
-
-
 class TQLayer_n(TQLayer):
     def __init__(self, arguments, design):
         super().__init__(arguments, design)
@@ -267,7 +265,7 @@ class QNet(nn.Module):
         self.QuantumLayer_n = TQLayer_n(self.args, self.design)
         self.QuantumLayer_remain = TQLayer_remain(self.args, self.design)
         self.criterion = nn.CrossEntropyLoss()
-        self.fc = nn.Linear(in_features=4, out_features=10)
+        self.out = nn.Linear(in_features=4, out_features=10)
         self.adaptive_pool = nn.AdaptiveAvgPool2d((4, 4))
 
         self.q_params_rot = nn.Parameter(
@@ -286,16 +284,12 @@ class QNet(nn.Module):
         x = self.representation_to_output(psi, x)
         return x
     def input_to_representation(self, x):
-        self.QuantumLayer_n.q_params_rot = self.QuantumLayer.q_params_rot
-        self.QuantumLayer_n.q_params_enta = self.QuantumLayer.q_params_enta
         if(x.shape[-1] == 28):
             x = self.preprocess(x)
         psi = self.QuantumLayer_n(x, self.args.represent_n, self.q_params_rot, self.q_params_enta)
         return psi
 
     def representation_to_output(self, psi, x):
-        self.QuantumLayer_remain.q_params_rot = self.QuantumLayer.q_params_rot
-        self.QuantumLayer_remain.q_params_enta = self.QuantumLayer.q_params_enta
         if (x.shape[-1] == 28):
             x = self.preprocess(x)
         out = self.QuantumLayer_remain(x, psi, self.args.represent_n, self.q_params_rot, self.q_params_enta)
@@ -306,7 +300,7 @@ class QNet(nn.Module):
             "adaptive_pool": self.adaptive_pool,
             "tqlayer_n": self.QuantumLayer_n,
             "tqlayer_n_remain": self.QuantumLayer_remain,
-            "fc": self.fc
+            "out": self.out
         }
     def train_epoch(
         self,
