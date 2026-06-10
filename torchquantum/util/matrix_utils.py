@@ -122,7 +122,7 @@ def ultra_precise_unitary(matrix, iterations=5, tolerance=1e-10):
         if i == iterations-1 and best_deviation > tolerance:
             try:
                 print("  Attempting high-precision SVD for final refinement")
-                matrix_dp = np.array(best_matrix, dtype=np.complex128)
+                matrix_dp = np.array(best_matrix, dtype=np.complex64)
                 V_dp, _, Wh_dp = scipy.linalg.svd(matrix_dp, full_matrices=True, lapack_driver='gesdd')
                 U_dp = V_dp @ Wh_dp
                 
@@ -158,7 +158,7 @@ def ultra_precise_unitary(matrix, iterations=5, tolerance=1e-10):
             pass
     
     # Convert to high precision complex type
-    final_matrix = np.array(best_matrix, dtype=np.complex128)
+    final_matrix = np.array(best_matrix, dtype=np.complex64)
     final_deviation = np.max(np.abs(final_matrix.conj().T @ final_matrix - np.eye(final_matrix.shape[0])))
     print(f"Final deviation from unitarity: {final_deviation}")
     print(f"==== END ULTRA_PRECISE_UNITARY DEBUG ====\n")

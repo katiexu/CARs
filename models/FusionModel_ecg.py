@@ -362,7 +362,7 @@ class TQLayer_remain(tq.QuantumModule):
                 j = int(op[1][0])
                 self.uploading[j](qdev, x[:, j])
 
-    def forward(self, x,psi,n):
+    def forward(self, x, psi, n):
         bsz = x.shape[0]
         qdev = tq.QuantumDevice(n_wires=self.n_wires, bsz=bsz, device=x.device)
         qdev.set_states(psi.reshape([bsz] + [2] * self.n_wires))
@@ -374,45 +374,49 @@ class QNet(nn.Module):
     def __init__(self, arguments, design):
         super(QNet, self).__init__()
         self.args = arguments
+        self.n_qubits = self.args.n_qubits
+        self.n_layers = self.args.n_layers
         self.design = design
         self.QuantumLayer = TQLayer(self.args, self.design)
         self.QuantumLayer_n = TQLayer_n(self.args, self.design)
         self.QuantumLayer_remain = TQLayer_remain(self.args, self.design)
         self.criterion = nn.CrossEntropyLoss()
-        self.fc = nn.Linear(in_features=4, out_features=10)
-        self.adaptive_pool = nn.AdaptiveAvgPool2d((4, 4))
+        self.fc = nn.Linear(in_features=187, out_features=self.n_qubits*self.n_layers)
+        self.out = nn.Linear(in_features=self.n_qubits, out_features=2)
+
     def preprocess(self, x):
         bsz = x.shape[0]
-        x = self.adaptive_pool(x)
-        x = x.view(bsz, 4, 4)
+        x = self.fc(x)
+        x = x.view(bsz, self.n_qubits, self.n_layers)
         return x
     def forward(self, x):
         x = self.preprocess(x)
-        psi = self.input_to_representation(x)
-        x = self.representation_to_output(psi, x)
+        phi = self.input_to_representation(x)
+        x = self.representation_to_output(phi, x)
         return x
     def input_to_representation(self, x):
         self.QuantumLayer_n.q_params_rot = self.QuantumLayer.q_params_rot
         self.QuantumLayer_n.q_params_enta = self.QuantumLayer.q_params_enta
-        if(x.shape[-1] == 28):
+        if x.shape[-1] == 187 :
             x = self.preprocess(x)
-        x = self.QuantumLayer_n(x, self.args.represent_n)
-        return x
 
-    def representation_to_output(self, dms, x):
+        dms = self.QuantumLayer_n(x, self.args.represent_n)
+        return dms
+
+    def representation_to_output(self, phi, x):
         self.QuantumLayer_remain.q_params_rot = self.QuantumLayer.q_params_rot
         self.QuantumLayer_remain.q_params_enta = self.QuantumLayer.q_params_enta
-        if (x.shape[-1] == 28):
+        if x.shape[-1] == 187 :
             x = self.preprocess(x)
-        out=self.QuantumLayer_remain(x, dms, self.args.represent_n)
-        return self.fc(out)
+        out=self.QuantumLayer_remain(x, phi, self.args.represent_n)
+        return self.out(out)
 
     def get_hooked_modules(self) -> dict[str, nn.Module]:
         return {
-            "adaptive_pool": self.adaptive_pool,
+            "fc": self.fc,
             "tqlayer_n": self.QuantumLayer_n,
             "tqlayer_n_remain": self.QuantumLayer_remain,
-            "fc": self.fc
+            "out": self.out
         }
     def train_epoch(
         self,

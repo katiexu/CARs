@@ -9,6 +9,7 @@ from sklearn.svm import SVC
 from sklearn.linear_model import SGDClassifier
 from sklearn.model_selection import permutation_test_score, train_test_split
 from sklearn.metrics import accuracy_score
+from tqdm import tqdm
 
 
 class ConceptExplainer(ABC):
@@ -236,7 +237,13 @@ class CAR(ConceptExplainer, ABC):
 
         optuna.logging.set_verbosity(optuna.logging.WARNING)
         study = optuna.create_study(direction="maximize")
-        study.optimize(train_acc, n_trials=1000)
+        # 添加进度条回调
+        pbar = tqdm(total=1000, desc="Tuning kernel width", unit="trial")
+        def callback(study, trial):
+            pbar.update(1)
+        study.optimize(train_acc, n_trials=1000, callbacks=[callback])
+        pbar.close()
+
         self.kernel_width = study.best_params["kernel_width"]
         logging.info(
             f"Optimal kernel width {self.kernel_width:.3g} with training accuracy {study.best_value:.2g}"
@@ -383,7 +390,7 @@ class CAV(ConceptExplainer, ABC):
             )
         elif len(grads.shape) > 2:
             grads = grads.flatten(start_dim=1)
-        # cav 是单一概念方向 (1, dim)，用 "i,bi->b" 与每个样本做内积，避免 batch 维(1 vs 120)冲突
+        # cav 是单一概念方向 (1, dim)，用 "i,bi->b" 与每个样本做内积
         cav = cav.reshape(-1)
         return torch.einsum("i,bi->b", cav, grads).detach().cpu().numpy()
 

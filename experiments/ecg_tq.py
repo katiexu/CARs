@@ -8,11 +8,12 @@ import numpy as np
 from pathlib import Path
 from torch.utils.data import DataLoader
 from utils.dataset import ECGDataset, generate_ecg_concept_dataset
-from models.ecg import ClassifierECG
 from utils.hooks import register_hooks, get_saved_representations, remove_all_hooks
 from explanations.concept import CAR, CAV
 from explanations.feature import CARFeatureImportance, VanillaFeatureImportance
 from sklearn.metrics import accuracy_score
+from models.FusionModel_ecg import QNet, single_enta_to_design
+from Arguments import Arguments
 from utils.plot import (
     plot_concept_accuracy,
     plot_global_explanation,
@@ -27,8 +28,37 @@ concept_to_class = {
     "Fusion Beats": 3,
     "Unknown": 4,
 }
+myargs = Arguments(task='ecg')
+
+n_layers = myargs.n_layers
+n_qubits = myargs.n_qubits
+single = [[i]+[1]*2*n_layers for i in range(1,n_qubits+1)]
+enta = [[i]+[i+1]*n_layers for i in range(1,n_qubits)]+[[n_qubits]+[1]*n_layers]
+arch_code = [myargs.n_qubits, myargs.n_layers]
+design = single_enta_to_design(single, enta, arch_code)
 
 
+
+def dm2vec(rho):
+    """
+    把 单个密度矩阵（复数）→ 实数特征向量
+    输入：rho (DensityMatrix 或 np.array)
+    输出：实数一维向量
+    """
+    # 转成 numpy 复数矩阵
+    if hasattr(rho, 'data'):
+        rho = rho.data
+
+    # 实部 + 虚部 拼接（SVM只认实数）
+    real_part = np.real(rho).flatten()
+    imag_part = np.imag(rho).flatten()
+
+    # 合并成一个实数向量
+    feature = np.concatenate([real_part, imag_part])
+
+    # 去掉极小值（避免数值噪声）
+    feature = np.nan_to_num(feature, nan=0, posinf=0, neginf=0)
+    return feature
 def train_ecg_model(
     latent_dim: int,
     batch_size: int,
@@ -41,7 +71,7 @@ def train_ecg_model(
     if not model_dir.exists():
         os.makedirs(model_dir)
     device = torch.device("cpu")
-    model = ClassifierECG(latent_dim, model_name).to(device)
+    model = QNet(myargs, design).to(device)
     train_set = ECGDataset(data_dir, train=True, balance_dataset=True)
     test_set = ECGDataset(data_dir, train=False, balance_dataset=False)
     train_loader = DataLoader(train_set, batch_size, shuffle=True)
@@ -65,8 +95,8 @@ def concept_accuracy(
     if not representation_dir.exists():
         os.makedirs(representation_dir)
 
-    model = ClassifierECG(latent_dim, model_name).to(device)
-    model.load_state_dict(torch.load(model_dir / f"{model_name}.pt"), strict=False)
+    model = QNet(myargs, design).to(device)
+    model.load_state_dict(torch.load(model_dir / f"vqc_model.pt"), strict=False)
     model.to(device)
     model.eval()
 
@@ -99,10 +129,14 @@ def concept_accuracy(
             cav = CAV(device)
             hook_name = f"{concept_name}_seed{random_seed}_train_{module_name}"
             H_train = get_saved_representations(hook_name, representation_dir)
+            if H_train.dtype == np.complex64:
+                H_train=np.array([dm2vec(dm) for dm in H_train])
             car.fit(H_train, y_train)
             cav.fit(H_train, y_train)
             hook_name = f"{concept_name}_seed{random_seed}_test_{module_name}"
             H_test = get_saved_representations(hook_name, representation_dir)
+            if H_test.dtype == np.complex64:
+                H_test=np.array([dm2vec(dm) for dm in H_test])
             results_data.append(
                 [
                     concept_name,
@@ -150,8 +184,8 @@ def statistical_significance(
     if not representation_dir.exists():
         os.makedirs(representation_dir)
 
-    model = ClassifierECG(latent_dim, model_name)
-    model.load_state_dict(torch.load(model_dir / f"{model_name}.pt"), strict=False)
+    model = QNet(myargs, design).to(device)
+    model.load_state_dict(torch.load(model_dir / f"vqc_model.pt"), strict=False)
     model.to(device)
     model.eval()
 
@@ -176,6 +210,8 @@ def statistical_significance(
             cav = CAV(device)
             hook_name = f"{concept_name}_seed{random_seed}_train_{module_name}"
             H_train = get_saved_representations(hook_name, representation_dir)
+            if H_train.dtype == np.complex64:
+                H_train=np.array([dm2vec(dm) for dm in H_train])
             results_data.append(
                 [
                     concept_name,
@@ -217,8 +253,8 @@ def global_explanations(
     if not model_dir.exists():
         os.makedirs(model_dir)
 
-    model = ClassifierECG(latent_dim, model_name)
-    model.load_state_dict(torch.load(model_dir / f"{model_name}.pt"), strict=False)
+    model = QNet(myargs, design).to(device)
+    model.load_state_dict(torch.load(model_dir / f"vqc_model.pt"), strict=False)
     model.to(device)
     model.eval()
 
@@ -240,6 +276,8 @@ def global_explanations(
             .cpu()
             .numpy()
         )
+        if H_train.dtype == np.complex64:
+            H_train = np.array([dm2vec(dm) for dm in H_train])
         car_classifier.fit(H_train, y_train)
         cav_classifier.fit(H_train, y_train)
 
@@ -258,6 +296,8 @@ def global_explanations(
     for X_test, y_test in tqdm(test_loader, unit="batch", leave=False):
         y_test_binary = torch.where(y_test == 0, 0, 1)
         H_test = model.input_to_representation(X_test.to(device)).detach().cpu().numpy()
+        if H_test.dtype == np.complex64:
+            H_test = np.array([dm2vec(dm) for dm in H_test])
         car_preds = [car.predict(H_test) for car in car_classifiers]
         cav_preds = [
             cav.concept_importance(
@@ -309,8 +349,8 @@ def feature_importance(
         os.makedirs(save_dir)
 
     model_dir = model_dir / model_name
-    model = ClassifierECG(latent_dim, model_name)
-    model.load_state_dict(torch.load(model_dir / f"{model_name}.pt"), strict=False)
+    model = QNet(myargs, design).to(device)
+    model.load_state_dict(torch.load(model_dir / f"vqc_model.pt"), strict=False)
     model.to(device)
     model.eval()
 
@@ -337,6 +377,8 @@ def feature_importance(
             .cpu()
             .numpy()
         )
+        if H_train.dtype == np.complex64:
+            H_train = np.array([dm2vec(dm) for dm in H_train])
         car.fit(H_train, y_train)
         car.tune_kernel_width(H_train, y_train)
         logging.info(
@@ -396,10 +438,10 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--name", type=str, default="concept_accuracy")
     parser.add_argument("--seeds", nargs="+", type=int, default=list(range(1, 11)))
-    parser.add_argument("--batch_size", type=int, default=300)
+    parser.add_argument("--batch_size", type=int, default=20)
     parser.add_argument("--latent_dim", type=int, default=32)
     parser.add_argument("--train", action="store_true")
-    parser.add_argument("--plot", action="store_true")
+    parser.add_argument("--plot", action="store_true", default=True)
     args = parser.parse_args()
     model_name = f"model_{args.latent_dim}"
     # if args.train:
@@ -429,4 +471,4 @@ if __name__ == "__main__":
     # train_ecg_model(args.latent_dim, args.batch_size, model_name=model_name)
     concept_accuracy(args.seeds, args.latent_dim, args.plot, model_name=model_name)
     statistical_significance(args.seeds[0], args.latent_dim, model_name=model_name)
-    feature_importance(args.seeds[0],args.batch_size,args.latent_dim,args.plot,model_name=model_name,)
+    feature_importance(args.seeds[0],100,args.latent_dim,args.plot,model_name=model_name,)

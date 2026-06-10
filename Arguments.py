@@ -42,7 +42,10 @@ class Arguments:
         self.init_weight = 'init_weight_'+ task
         self.SNR = 0.5
         self.strategy = 'mix'
-
+        if task == 'ecg':
+            self.n_qubits = 6
+            self.n_layers = 4
+            self.represent_n = 3
 
         if task == ('MNIST_10' or 'FASHION_10'):
             self.n_qubits   = 4

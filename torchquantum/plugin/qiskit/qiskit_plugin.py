@@ -395,7 +395,7 @@ def tq2qiskit_initialize(q_device: tq.QuantumDevice, all_states):
     for k in range(bsz):
         circ = QuantumCircuit(q_device.n_wires)
         state = all_states[k]
-        state = np.complex128(state)
+        state = np.complex64(state)
         state = state / (np.absolute(state) ** 2).sum()
         state = switch_little_big_endian_state(state)
         qiskit.circuit.library.data_preparation.state_preparation._EPS = 1e-7

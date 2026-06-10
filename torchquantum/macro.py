@@ -30,7 +30,7 @@ from string import ascii_lowercase
 
 torch_numpy_dtype_dict = {
     torch.complex64: np.complex64,
-    torch.complex128: np.complex128,
+    torch.complex64: np.complex64,
     torch.float32: np.float32,
     torch.float64: np.float64,
     torch.int32: np.int32,
