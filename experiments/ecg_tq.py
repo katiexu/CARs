@@ -438,7 +438,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--name", type=str, default="concept_accuracy")
     parser.add_argument("--seeds", nargs="+", type=int, default=list(range(1, 11)))
-    parser.add_argument("--batch_size", type=int, default=20)
+    parser.add_argument("--batch_size", type=int, default=100)
     parser.add_argument("--latent_dim", type=int, default=32)
     parser.add_argument("--train", action="store_true")
     parser.add_argument("--plot", action="store_true", default=True)

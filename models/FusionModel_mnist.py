@@ -206,10 +206,6 @@ class TQLayer(tq.QuantumModule):
         self.n_wires = self.args.n_qubits
         self.uploading = [tq.GeneralEncoder(self.data_uploading(i)) for i in range(self.n_wires)]
 
-        self.q_params_rot = nn.Parameter(
-            pi * torch.rand(self.args.n_layers, self.args.n_qubits, 3))  # each U3 gate needs 3 parameters
-        self.q_params_enta = nn.Parameter(
-            pi * torch.rand(self.args.n_layers, self.args.n_qubits, 3))  # each CU3 gate needs 3 parameters
 
         self.measure = tq.MeasureAll(tq.PauliZ)
 
@@ -222,149 +218,45 @@ class TQLayer(tq.QuantumModule):
         ]
         return input
 
-    def _apply_ops(self, qdev, x, ops):
+    def _apply_ops(self, qdev, x, ops, q_params_rot, q_params_enta):
         """在给定的 QuantumDevice 上施加 ops 中的门操作（保持梯度）。"""
         for op in ops:
             if op[0] == 'U3':
                 layer = op[2]
                 qubit = op[1][0]
-                params = self.q_params_rot[layer][qubit].unsqueeze(0)  # 重塑为 [1, 3]
+                params = q_params_rot[layer][qubit].unsqueeze(0)  # 重塑为 [1, 3]
                 tqf.u3(qdev, wires=op[1], params=params)
             elif op[0] == 'C(U3)':
                 layer = op[2]
                 control_qubit = op[1][0]
-                params = self.q_params_enta[layer][control_qubit].unsqueeze(0)  # 重塑为 [1, 3]
+                params = q_params_enta[layer][control_qubit].unsqueeze(0)  # 重塑为 [1, 3]
                 tqf.cu3(qdev, wires=op[1], params=params)
             else:  # data uploading: if op[0] == 'data'
                 j = int(op[1][0])
                 self.uploading[j](qdev, x[:, j])
 
-    def forward(self, x):
-        bsz = x.shape[0]
-        qdev = tq.QuantumDevice(n_wires=self.n_wires, bsz=bsz, device=x.device)
-        self._apply_ops(qdev, x, self.design)
-        out = self.measure(qdev)
-        return out
 
-    def forward_n(self, x, n):
-        """运行 layer < n 的所有门操作，返回第 n 层处的密度矩阵 dms。
+class TQLayer_n(TQLayer):
+    def __init__(self, arguments, design):
+        super().__init__(arguments, design)
 
-        返回形状为 (bsz, 2**n_wires, 2**n_wires) 的复数密度矩阵，
-        dms = |psi><psi|，整个过程保持梯度。
-        """
+    def forward(self, x, n, q_params_rot, q_params_enta):
         bsz = x.shape[0]
         qdev = tq.QuantumDevice(n_wires=self.n_wires, bsz=bsz, device=x.device)
         ops = [op for op in self.design if op[2] < n]
-        self._apply_ops(qdev, x, ops)
+        self._apply_ops(qdev, x, ops, q_params_rot, q_params_enta)
         psi = qdev.get_states_1d()  # (bsz, dim) 复数态矢，带梯度
         return psi
+class TQLayer_remain(TQLayer):
+    def __init__(self, arguments, design):
+        super().__init__(arguments, design)
 
-    def forward_remain(self, psi, x, n):
-        """输入第 n 层的密度矩阵 dms，运行 layer >= n 的剩余门操作并测量。
-
-        由 dms = |psi><psi| 可微地恢复态矢（取对角元最大的列做归一化，
-        仅相差一个全局相位，不影响任何观测量的期望值），从而保证
-        forward_n(x, n) 之后再 forward_remain(dms, x, n) 等价于 forward(x)
-        且全程保持梯度。
-        """
+    def forward(self, x, psi, n, q_params_rot, q_params_enta):
         bsz = x.shape[0]
         qdev = tq.QuantumDevice(n_wires=self.n_wires, bsz=bsz, device=x.device)
         qdev.set_states(psi.reshape([bsz] + [2] * self.n_wires))
         ops = [op for op in self.design if op[2] >= n]
-        self._apply_ops(qdev, x, ops)
-        out = self.measure(qdev)
-        return out
-class TQLayer_n(tq.QuantumModule):
-    def __init__(self, arguments, design):
-        super().__init__()
-        self.args = arguments
-        self.design = design
-        self.n_wires = self.args.n_qubits        
-        self.uploading = [tq.GeneralEncoder(self.data_uploading(i)) for i in range(self.n_wires)]
-
-        self.q_params_rot = nn.Parameter(pi * torch.rand(self.args.n_layers, self.args.n_qubits, 3))  # each U3 gate needs 3 parameters
-        self.q_params_enta = nn.Parameter(pi * torch.rand(self.args.n_layers, self.args.n_qubits, 3))  # each CU3 gate needs 3 parameters
-        
-        self.measure = tq.MeasureAll(tq.PauliZ)
-
-
-    def data_uploading(self, qubit):
-        input = [
-            {"input_idx": [0], "func": "ry", "wires": [qubit]},
-            {"input_idx": [1], "func": "rz", "wires": [qubit]},
-            {"input_idx": [2], "func": "rx", "wires": [qubit]},
-            {"input_idx": [3], "func": "ry", "wires": [qubit]},
-        ]
-        return input
-
-    def _apply_ops(self, qdev, x, ops):
-        """在给定的 QuantumDevice 上施加 ops 中的门操作（保持梯度）。"""
-        for op in ops:
-            if op[0] == 'U3':
-                layer = op[2]
-                qubit = op[1][0]
-                params = self.q_params_rot[layer][qubit].unsqueeze(0)  # 重塑为 [1, 3]
-                tqf.u3(qdev, wires=op[1], params=params)
-            elif op[0] == 'C(U3)':
-                layer = op[2]
-                control_qubit = op[1][0]
-                params = self.q_params_enta[layer][control_qubit].unsqueeze(0)  # 重塑为 [1, 3]
-                tqf.cu3(qdev, wires=op[1], params=params)
-            else:   # data uploading: if op[0] == 'data'
-                j = int(op[1][0])
-                self.uploading[j](qdev, x[:, j])
-
-    def forward(self, x,n):
-        bsz = x.shape[0]
-        qdev = tq.QuantumDevice(n_wires=self.n_wires, bsz=bsz, device=x.device)
-        ops = [op for op in self.design if op[2] < n]
-        self._apply_ops(qdev, x, ops)
-        psi = qdev.get_states_1d()  # (bsz, dim) 复数态矢，带梯度
-        return psi
-class TQLayer_remain(tq.QuantumModule):
-    def __init__(self, arguments, design):
-        super().__init__()
-        self.args = arguments
-        self.design = design
-        self.n_wires = self.args.n_qubits
-        self.uploading = [tq.GeneralEncoder(self.data_uploading(i)) for i in range(self.n_wires)]
-
-        self.q_params_rot = nn.Parameter(
-            pi * torch.rand(self.args.n_layers, self.args.n_qubits, 3))  # each U3 gate needs 3 parameters
-        self.q_params_enta = nn.Parameter(
-            pi * torch.rand(self.args.n_layers, self.args.n_qubits, 3))  # each CU3 gate needs 3 parameters
-
-        self.measure = tq.MeasureAll(tq.PauliZ)
-    def data_uploading(self, qubit):
-        input = [
-            {"input_idx": [0], "func": "ry", "wires": [qubit]},
-            {"input_idx": [1], "func": "rz", "wires": [qubit]},
-            {"input_idx": [2], "func": "rx", "wires": [qubit]},
-            {"input_idx": [3], "func": "ry", "wires": [qubit]},
-        ]
-        return input
-    def _apply_ops(self, qdev, x, ops):
-        """在给定的 QuantumDevice 上施加 ops 中的门操作（保持梯度）。"""
-        for op in ops:
-            if op[0] == 'U3':
-                layer = op[2]
-                qubit = op[1][0]
-                params = self.q_params_rot[layer][qubit].unsqueeze(0)  # 重塑为 [1, 3]
-                tqf.u3(qdev, wires=op[1], params=params)
-            elif op[0] == 'C(U3)':
-                layer = op[2]
-                control_qubit = op[1][0]
-                params = self.q_params_enta[layer][control_qubit].unsqueeze(0)  # 重塑为 [1, 3]
-                tqf.cu3(qdev, wires=op[1], params=params)
-            else:  # data uploading: if op[0] == 'data'
-                j = int(op[1][0])
-                self.uploading[j](qdev, x[:, j])
-    def forward(self, x,psi,n):
-        bsz = x.shape[0]
-        qdev = tq.QuantumDevice(n_wires=self.n_wires, bsz=bsz, device=x.device)
-        qdev.set_states(psi.reshape([bsz] + [2] * self.n_wires))
-        ops = [op for op in self.design if op[2] >= n]
-        self._apply_ops(qdev, x, ops)
+        self._apply_ops(qdev, x, ops,q_params_rot, q_params_enta)
         out = self.measure(qdev)
         return out
 class QNet(nn.Module):
@@ -372,12 +264,17 @@ class QNet(nn.Module):
         super(QNet, self).__init__()
         self.args = arguments
         self.design = design
-        self.QuantumLayer = TQLayer(self.args, self.design)
         self.QuantumLayer_n = TQLayer_n(self.args, self.design)
         self.QuantumLayer_remain = TQLayer_remain(self.args, self.design)
         self.criterion = nn.CrossEntropyLoss()
         self.fc = nn.Linear(in_features=4, out_features=10)
         self.adaptive_pool = nn.AdaptiveAvgPool2d((4, 4))
+
+        self.q_params_rot = nn.Parameter(
+            pi * torch.rand(self.args.n_layers, self.args.n_qubits, 3))  # each U3 gate needs 3 parameters
+        self.q_params_enta = nn.Parameter(
+            pi * torch.rand(self.args.n_layers, self.args.n_qubits, 3))  # each CU3 gate needs 3 parameters
+
     def preprocess(self, x):
         bsz = x.shape[0]
         x = self.adaptive_pool(x)
@@ -393,16 +290,16 @@ class QNet(nn.Module):
         self.QuantumLayer_n.q_params_enta = self.QuantumLayer.q_params_enta
         if(x.shape[-1] == 28):
             x = self.preprocess(x)
-        x = self.QuantumLayer_n(x, self.args.represent_n)
-        return x
+        psi = self.QuantumLayer_n(x, self.args.represent_n, self.q_params_rot, self.q_params_enta)
+        return psi
 
     def representation_to_output(self, psi, x):
         self.QuantumLayer_remain.q_params_rot = self.QuantumLayer.q_params_rot
         self.QuantumLayer_remain.q_params_enta = self.QuantumLayer.q_params_enta
         if (x.shape[-1] == 28):
             x = self.preprocess(x)
-        out=self.QuantumLayer_remain(x, psi, self.args.represent_n)
-        return self.fc(out)
+        out = self.QuantumLayer_remain(x, psi, self.args.represent_n, self.q_params_rot, self.q_params_enta)
+        return self.out(out)
 
     def get_hooked_modules(self) -> dict[str, nn.Module]:
         return {
