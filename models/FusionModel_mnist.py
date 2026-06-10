@@ -335,7 +335,6 @@ class TQLayer_remain(tq.QuantumModule):
             pi * torch.rand(self.args.n_layers, self.args.n_qubits, 3))  # each CU3 gate needs 3 parameters
 
         self.measure = tq.MeasureAll(tq.PauliZ)
-
     def data_uploading(self, qubit):
         input = [
             {"input_idx": [0], "func": "ry", "wires": [qubit]},
@@ -344,7 +343,6 @@ class TQLayer_remain(tq.QuantumModule):
             {"input_idx": [3], "func": "ry", "wires": [qubit]},
         ]
         return input
-
     def _apply_ops(self, qdev, x, ops):
         """在给定的 QuantumDevice 上施加 ops 中的门操作（保持梯度）。"""
         for op in ops:
@@ -361,7 +359,6 @@ class TQLayer_remain(tq.QuantumModule):
             else:  # data uploading: if op[0] == 'data'
                 j = int(op[1][0])
                 self.uploading[j](qdev, x[:, j])
-
     def forward(self, x,psi,n):
         bsz = x.shape[0]
         qdev = tq.QuantumDevice(n_wires=self.n_wires, bsz=bsz, device=x.device)
@@ -399,12 +396,12 @@ class QNet(nn.Module):
         x = self.QuantumLayer_n(x, self.args.represent_n)
         return x
 
-    def representation_to_output(self, dms, x):
+    def representation_to_output(self, psi, x):
         self.QuantumLayer_remain.q_params_rot = self.QuantumLayer.q_params_rot
         self.QuantumLayer_remain.q_params_enta = self.QuantumLayer.q_params_enta
         if (x.shape[-1] == 28):
             x = self.preprocess(x)
-        out=self.QuantumLayer_remain(x, dms, self.args.represent_n)
+        out=self.QuantumLayer_remain(x, psi, self.args.represent_n)
         return self.fc(out)
 
     def get_hooked_modules(self) -> dict[str, nn.Module]:
