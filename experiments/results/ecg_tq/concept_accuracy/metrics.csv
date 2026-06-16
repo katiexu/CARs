@@ -1,0 +1,321 @@
+Concept,Layer,Seed,Method,Train ACC,Test ACC
+Supraventricular,fc,1,CAR,0.87,0.77
+Supraventricular,fc,1,CAV,0.8025,0.75
+Supraventricular,tqlayer_n,1,CAR,0.955,0.8
+Supraventricular,tqlayer_n,1,CAV,0.8275,0.78
+Supraventricular,tqlayer_n_remain,1,CAR,0.8775,0.71
+Supraventricular,tqlayer_n_remain,1,CAV,0.705,0.55
+Supraventricular,out,1,CAR,0.7425,0.61
+Supraventricular,out,1,CAV,0.7425,0.6
+Supraventricular,fc,2,CAR,0.8625,0.78
+Supraventricular,fc,2,CAV,0.7475,0.74
+Supraventricular,tqlayer_n,2,CAR,0.9475,0.78
+Supraventricular,tqlayer_n,2,CAV,0.8,0.73
+Supraventricular,tqlayer_n_remain,2,CAR,0.825,0.7
+Supraventricular,tqlayer_n_remain,2,CAV,0.715,0.61
+Supraventricular,out,2,CAR,0.7225,0.62
+Supraventricular,out,2,CAV,0.705,0.64
+Supraventricular,fc,3,CAR,0.8675,0.83
+Supraventricular,fc,3,CAV,0.7925,0.75
+Supraventricular,tqlayer_n,3,CAR,0.9375,0.85
+Supraventricular,tqlayer_n,3,CAV,0.83,0.82
+Supraventricular,tqlayer_n_remain,3,CAR,0.8475,0.82
+Supraventricular,tqlayer_n_remain,3,CAV,0.715,0.68
+Supraventricular,out,3,CAR,0.735,0.7
+Supraventricular,out,3,CAV,0.725,0.69
+Supraventricular,fc,4,CAR,0.85,0.91
+Supraventricular,fc,4,CAV,0.8125,0.83
+Supraventricular,tqlayer_n,4,CAR,0.95,0.89
+Supraventricular,tqlayer_n,4,CAV,0.8225,0.82
+Supraventricular,tqlayer_n_remain,4,CAR,0.8625,0.82
+Supraventricular,tqlayer_n_remain,4,CAV,0.6975,0.73
+Supraventricular,out,4,CAR,0.72,0.77
+Supraventricular,out,4,CAV,0.7025,0.74
+Supraventricular,fc,5,CAR,0.87,0.8
+Supraventricular,fc,5,CAV,0.8,0.76
+Supraventricular,tqlayer_n,5,CAR,0.95,0.82
+Supraventricular,tqlayer_n,5,CAV,0.825,0.79
+Supraventricular,tqlayer_n_remain,5,CAR,0.8825,0.78
+Supraventricular,tqlayer_n_remain,5,CAV,0.7175,0.68
+Supraventricular,out,5,CAR,0.7575,0.67
+Supraventricular,out,5,CAV,0.745,0.67
+Supraventricular,fc,6,CAR,0.895,0.87
+Supraventricular,fc,6,CAV,0.8425,0.86
+Supraventricular,tqlayer_n,6,CAR,0.95,0.89
+Supraventricular,tqlayer_n,6,CAV,0.8375,0.84
+Supraventricular,tqlayer_n_remain,6,CAR,0.845,0.83
+Supraventricular,tqlayer_n_remain,6,CAV,0.6875,0.68
+Supraventricular,out,6,CAR,0.7425,0.72
+Supraventricular,out,6,CAV,0.6875,0.66
+Supraventricular,fc,7,CAR,0.88,0.86
+Supraventricular,fc,7,CAV,0.83,0.76
+Supraventricular,tqlayer_n,7,CAR,0.9675,0.87
+Supraventricular,tqlayer_n,7,CAV,0.8375,0.76
+Supraventricular,tqlayer_n_remain,7,CAR,0.83,0.83
+Supraventricular,tqlayer_n_remain,7,CAV,0.71,0.81
+Supraventricular,out,7,CAR,0.7325,0.78
+Supraventricular,out,7,CAV,0.7,0.81
+Supraventricular,fc,8,CAR,0.86,0.81
+Supraventricular,fc,8,CAV,0.7725,0.73
+Supraventricular,tqlayer_n,8,CAR,0.94,0.88
+Supraventricular,tqlayer_n,8,CAV,0.8175,0.82
+Supraventricular,tqlayer_n_remain,8,CAR,0.8575,0.79
+Supraventricular,tqlayer_n_remain,8,CAV,0.715,0.74
+Supraventricular,out,8,CAR,0.74,0.71
+Supraventricular,out,8,CAV,0.71,0.75
+Supraventricular,fc,9,CAR,0.88,0.88
+Supraventricular,fc,9,CAV,0.8225,0.85
+Supraventricular,tqlayer_n,9,CAR,0.95,0.92
+Supraventricular,tqlayer_n,9,CAV,0.8475,0.82
+Supraventricular,tqlayer_n_remain,9,CAR,0.83,0.72
+Supraventricular,tqlayer_n_remain,9,CAV,0.7,0.59
+Supraventricular,out,9,CAR,0.7375,0.61
+Supraventricular,out,9,CAV,0.7075,0.6
+Supraventricular,fc,10,CAR,0.85,0.91
+Supraventricular,fc,10,CAV,0.745,0.8
+Supraventricular,tqlayer_n,10,CAR,0.9525,0.93
+Supraventricular,tqlayer_n,10,CAV,0.815,0.84
+Supraventricular,tqlayer_n_remain,10,CAR,0.8425,0.82
+Supraventricular,tqlayer_n_remain,10,CAV,0.7575,0.69
+Supraventricular,out,10,CAR,0.7725,0.67
+Supraventricular,out,10,CAV,0.7425,0.67
+Premature Ventricular,fc,1,CAR,0.93,0.83
+Premature Ventricular,fc,1,CAV,0.88,0.82
+Premature Ventricular,tqlayer_n,1,CAR,0.9775,0.84
+Premature Ventricular,tqlayer_n,1,CAV,0.8525,0.77
+Premature Ventricular,tqlayer_n_remain,1,CAR,0.8625,0.8
+Premature Ventricular,tqlayer_n_remain,1,CAV,0.7975,0.69
+Premature Ventricular,out,1,CAR,0.7975,0.7
+Premature Ventricular,out,1,CAV,0.8,0.69
+Premature Ventricular,fc,2,CAR,0.8975,0.83
+Premature Ventricular,fc,2,CAV,0.825,0.88
+Premature Ventricular,tqlayer_n,2,CAR,0.9675,0.91
+Premature Ventricular,tqlayer_n,2,CAV,0.8325,0.87
+Premature Ventricular,tqlayer_n_remain,2,CAR,0.85,0.8
+Premature Ventricular,tqlayer_n_remain,2,CAV,0.76,0.8
+Premature Ventricular,out,2,CAR,0.765,0.79
+Premature Ventricular,out,2,CAV,0.76,0.8
+Premature Ventricular,fc,3,CAR,0.8775,0.89
+Premature Ventricular,fc,3,CAV,0.8275,0.79
+Premature Ventricular,tqlayer_n,3,CAR,0.9575,0.91
+Premature Ventricular,tqlayer_n,3,CAV,0.85,0.82
+Premature Ventricular,tqlayer_n_remain,3,CAR,0.8325,0.79
+Premature Ventricular,tqlayer_n_remain,3,CAV,0.7275,0.75
+Premature Ventricular,out,3,CAR,0.755,0.74
+Premature Ventricular,out,3,CAV,0.745,0.74
+Premature Ventricular,fc,4,CAR,0.9,0.9
+Premature Ventricular,fc,4,CAV,0.8675,0.84
+Premature Ventricular,tqlayer_n,4,CAR,0.975,0.93
+Premature Ventricular,tqlayer_n,4,CAV,0.8575,0.85
+Premature Ventricular,tqlayer_n_remain,4,CAR,0.86,0.82
+Premature Ventricular,tqlayer_n_remain,4,CAV,0.7775,0.77
+Premature Ventricular,out,4,CAR,0.7875,0.76
+Premature Ventricular,out,4,CAV,0.7825,0.78
+Premature Ventricular,fc,5,CAR,0.9125,0.84
+Premature Ventricular,fc,5,CAV,0.83,0.76
+Premature Ventricular,tqlayer_n,5,CAR,0.9625,0.86
+Premature Ventricular,tqlayer_n,5,CAV,0.8825,0.76
+Premature Ventricular,tqlayer_n_remain,5,CAR,0.8275,0.87
+Premature Ventricular,tqlayer_n_remain,5,CAV,0.77,0.78
+Premature Ventricular,out,5,CAR,0.76,0.81
+Premature Ventricular,out,5,CAV,0.765,0.79
+Premature Ventricular,fc,6,CAR,0.9,0.91
+Premature Ventricular,fc,6,CAV,0.8175,0.83
+Premature Ventricular,tqlayer_n,6,CAR,0.9675,0.94
+Premature Ventricular,tqlayer_n,6,CAV,0.86,0.85
+Premature Ventricular,tqlayer_n_remain,6,CAR,0.8725,0.82
+Premature Ventricular,tqlayer_n_remain,6,CAV,0.75,0.75
+Premature Ventricular,out,6,CAR,0.7475,0.72
+Premature Ventricular,out,6,CAV,0.7325,0.73
+Premature Ventricular,fc,7,CAR,0.89,0.92
+Premature Ventricular,fc,7,CAV,0.8375,0.85
+Premature Ventricular,tqlayer_n,7,CAR,0.9775,0.92
+Premature Ventricular,tqlayer_n,7,CAV,0.8275,0.87
+Premature Ventricular,tqlayer_n_remain,7,CAR,0.8225,0.78
+Premature Ventricular,tqlayer_n_remain,7,CAV,0.7575,0.75
+Premature Ventricular,out,7,CAR,0.755,0.76
+Premature Ventricular,out,7,CAV,0.755,0.77
+Premature Ventricular,fc,8,CAR,0.92,0.87
+Premature Ventricular,fc,8,CAV,0.855,0.79
+Premature Ventricular,tqlayer_n,8,CAR,0.985,0.93
+Premature Ventricular,tqlayer_n,8,CAV,0.88,0.8
+Premature Ventricular,tqlayer_n_remain,8,CAR,0.8425,0.84
+Premature Ventricular,tqlayer_n_remain,8,CAV,0.7525,0.81
+Premature Ventricular,out,8,CAR,0.755,0.83
+Premature Ventricular,out,8,CAV,0.7225,0.81
+Premature Ventricular,fc,9,CAR,0.9,0.85
+Premature Ventricular,fc,9,CAV,0.83,0.8
+Premature Ventricular,tqlayer_n,9,CAR,0.9775,0.91
+Premature Ventricular,tqlayer_n,9,CAV,0.8575,0.83
+Premature Ventricular,tqlayer_n_remain,9,CAR,0.87,0.85
+Premature Ventricular,tqlayer_n_remain,9,CAV,0.7925,0.77
+Premature Ventricular,out,9,CAR,0.76,0.78
+Premature Ventricular,out,9,CAV,0.7725,0.77
+Premature Ventricular,fc,10,CAR,0.8975,0.81
+Premature Ventricular,fc,10,CAV,0.8625,0.81
+Premature Ventricular,tqlayer_n,10,CAR,0.9575,0.83
+Premature Ventricular,tqlayer_n,10,CAV,0.8325,0.78
+Premature Ventricular,tqlayer_n_remain,10,CAR,0.875,0.81
+Premature Ventricular,tqlayer_n_remain,10,CAV,0.8025,0.76
+Premature Ventricular,out,10,CAR,0.7925,0.76
+Premature Ventricular,out,10,CAV,0.79,0.75
+Fusion Beats,fc,1,CAR,0.92,0.87
+Fusion Beats,fc,1,CAV,0.905,0.86
+Fusion Beats,tqlayer_n,1,CAR,0.9575,0.95
+Fusion Beats,tqlayer_n,1,CAV,0.9075,0.9
+Fusion Beats,tqlayer_n_remain,1,CAR,0.8425,0.9
+Fusion Beats,tqlayer_n_remain,1,CAV,0.72,0.85
+Fusion Beats,out,1,CAR,0.74,0.85
+Fusion Beats,out,1,CAV,0.7325,0.83
+Fusion Beats,fc,2,CAR,0.935,0.84
+Fusion Beats,fc,2,CAV,0.9125,0.83
+Fusion Beats,tqlayer_n,2,CAR,0.9675,0.92
+Fusion Beats,tqlayer_n,2,CAV,0.92,0.85
+Fusion Beats,tqlayer_n_remain,2,CAR,0.8675,0.8
+Fusion Beats,tqlayer_n_remain,2,CAV,0.7425,0.74
+Fusion Beats,out,2,CAR,0.76,0.74
+Fusion Beats,out,2,CAV,0.7525,0.7
+Fusion Beats,fc,3,CAR,0.9375,0.93
+Fusion Beats,fc,3,CAV,0.9275,0.92
+Fusion Beats,tqlayer_n,3,CAR,0.9775,0.96
+Fusion Beats,tqlayer_n,3,CAV,0.925,0.93
+Fusion Beats,tqlayer_n_remain,3,CAR,0.845,0.87
+Fusion Beats,tqlayer_n_remain,3,CAV,0.7925,0.85
+Fusion Beats,out,3,CAR,0.7875,0.84
+Fusion Beats,out,3,CAV,0.78,0.85
+Fusion Beats,fc,4,CAR,0.9325,0.94
+Fusion Beats,fc,4,CAV,0.88,0.95
+Fusion Beats,tqlayer_n,4,CAR,0.96,0.96
+Fusion Beats,tqlayer_n,4,CAV,0.8875,0.9
+Fusion Beats,tqlayer_n_remain,4,CAR,0.8425,0.79
+Fusion Beats,tqlayer_n_remain,4,CAV,0.7475,0.67
+Fusion Beats,out,4,CAR,0.78,0.74
+Fusion Beats,out,4,CAV,0.7525,0.71
+Fusion Beats,fc,5,CAR,0.9425,0.91
+Fusion Beats,fc,5,CAV,0.925,0.88
+Fusion Beats,tqlayer_n,5,CAR,0.9725,0.91
+Fusion Beats,tqlayer_n,5,CAV,0.925,0.88
+Fusion Beats,tqlayer_n_remain,5,CAR,0.845,0.78
+Fusion Beats,tqlayer_n_remain,5,CAV,0.7225,0.73
+Fusion Beats,out,5,CAR,0.74,0.74
+Fusion Beats,out,5,CAV,0.72,0.73
+Fusion Beats,fc,6,CAR,0.935,0.87
+Fusion Beats,fc,6,CAV,0.915,0.86
+Fusion Beats,tqlayer_n,6,CAR,0.96,0.89
+Fusion Beats,tqlayer_n,6,CAV,0.925,0.86
+Fusion Beats,tqlayer_n_remain,6,CAR,0.835,0.81
+Fusion Beats,tqlayer_n_remain,6,CAV,0.725,0.77
+Fusion Beats,out,6,CAR,0.735,0.78
+Fusion Beats,out,6,CAV,0.74,0.76
+Fusion Beats,fc,7,CAR,0.92,0.92
+Fusion Beats,fc,7,CAV,0.8925,0.94
+Fusion Beats,tqlayer_n,7,CAR,0.955,0.94
+Fusion Beats,tqlayer_n,7,CAV,0.9,0.92
+Fusion Beats,tqlayer_n_remain,7,CAR,0.86,0.9
+Fusion Beats,tqlayer_n_remain,7,CAV,0.715,0.78
+Fusion Beats,out,7,CAR,0.7275,0.8
+Fusion Beats,out,7,CAV,0.7075,0.77
+Fusion Beats,fc,8,CAR,0.9125,0.93
+Fusion Beats,fc,8,CAV,0.895,0.94
+Fusion Beats,tqlayer_n,8,CAR,0.955,0.96
+Fusion Beats,tqlayer_n,8,CAV,0.895,0.95
+Fusion Beats,tqlayer_n_remain,8,CAR,0.885,0.9
+Fusion Beats,tqlayer_n_remain,8,CAV,0.765,0.8
+Fusion Beats,out,8,CAR,0.765,0.82
+Fusion Beats,out,8,CAV,0.745,0.81
+Fusion Beats,fc,9,CAR,0.92,0.88
+Fusion Beats,fc,9,CAV,0.91,0.88
+Fusion Beats,tqlayer_n,9,CAR,0.9725,0.88
+Fusion Beats,tqlayer_n,9,CAV,0.905,0.87
+Fusion Beats,tqlayer_n_remain,9,CAR,0.8875,0.77
+Fusion Beats,tqlayer_n_remain,9,CAV,0.7575,0.77
+Fusion Beats,out,9,CAR,0.7575,0.79
+Fusion Beats,out,9,CAV,0.7475,0.79
+Fusion Beats,fc,10,CAR,0.9325,0.94
+Fusion Beats,fc,10,CAV,0.89,0.91
+Fusion Beats,tqlayer_n,10,CAR,0.9775,0.96
+Fusion Beats,tqlayer_n,10,CAV,0.9125,0.94
+Fusion Beats,tqlayer_n_remain,10,CAR,0.845,0.85
+Fusion Beats,tqlayer_n_remain,10,CAV,0.7675,0.75
+Fusion Beats,out,10,CAR,0.7625,0.72
+Fusion Beats,out,10,CAV,0.755,0.75
+Unknown,fc,1,CAR,0.9375,0.93
+Unknown,fc,1,CAV,0.91,0.89
+Unknown,tqlayer_n,1,CAR,0.9825,0.96
+Unknown,tqlayer_n,1,CAV,0.93,0.88
+Unknown,tqlayer_n_remain,1,CAR,0.9075,0.88
+Unknown,tqlayer_n_remain,1,CAV,0.82,0.8
+Unknown,out,1,CAR,0.8,0.79
+Unknown,out,1,CAV,0.8,0.78
+Unknown,fc,2,CAR,0.96,0.94
+Unknown,fc,2,CAV,0.9275,0.89
+Unknown,tqlayer_n,2,CAR,0.9775,0.95
+Unknown,tqlayer_n,2,CAV,0.9325,0.91
+Unknown,tqlayer_n_remain,2,CAR,0.9025,0.92
+Unknown,tqlayer_n_remain,2,CAV,0.7975,0.84
+Unknown,out,2,CAR,0.78,0.82
+Unknown,out,2,CAV,0.7825,0.83
+Unknown,fc,3,CAR,0.9575,0.98
+Unknown,fc,3,CAV,0.9325,0.94
+Unknown,tqlayer_n,3,CAR,0.99,0.95
+Unknown,tqlayer_n,3,CAV,0.9325,0.92
+Unknown,tqlayer_n_remain,3,CAR,0.8825,0.82
+Unknown,tqlayer_n_remain,3,CAV,0.795,0.72
+Unknown,out,3,CAR,0.8025,0.74
+Unknown,out,3,CAV,0.785,0.71
+Unknown,fc,4,CAR,0.9475,0.94
+Unknown,fc,4,CAV,0.9375,0.9
+Unknown,tqlayer_n,4,CAR,0.9825,0.96
+Unknown,tqlayer_n,4,CAV,0.9425,0.93
+Unknown,tqlayer_n_remain,4,CAR,0.8975,0.86
+Unknown,tqlayer_n_remain,4,CAV,0.7825,0.78
+Unknown,out,4,CAR,0.7875,0.77
+Unknown,out,4,CAV,0.79,0.77
+Unknown,fc,5,CAR,0.935,0.94
+Unknown,fc,5,CAV,0.915,0.91
+Unknown,tqlayer_n,5,CAR,1.0,0.95
+Unknown,tqlayer_n,5,CAV,0.9275,0.89
+Unknown,tqlayer_n_remain,5,CAR,0.9025,0.83
+Unknown,tqlayer_n_remain,5,CAV,0.8075,0.77
+Unknown,out,5,CAR,0.79,0.78
+Unknown,out,5,CAV,0.79,0.78
+Unknown,fc,6,CAR,0.975,0.93
+Unknown,fc,6,CAV,0.9475,0.93
+Unknown,tqlayer_n,6,CAR,0.995,0.95
+Unknown,tqlayer_n,6,CAV,0.9575,0.92
+Unknown,tqlayer_n_remain,6,CAR,0.9125,0.82
+Unknown,tqlayer_n_remain,6,CAV,0.7775,0.73
+Unknown,out,6,CAR,0.7725,0.74
+Unknown,out,6,CAV,0.7725,0.73
+Unknown,fc,7,CAR,0.9675,0.94
+Unknown,fc,7,CAV,0.955,0.92
+Unknown,tqlayer_n,7,CAR,0.98,0.97
+Unknown,tqlayer_n,7,CAV,0.9425,0.9
+Unknown,tqlayer_n_remain,7,CAR,0.895,0.86
+Unknown,tqlayer_n_remain,7,CAV,0.8175,0.84
+Unknown,out,7,CAR,0.7775,0.77
+Unknown,out,7,CAV,0.7625,0.78
+Unknown,fc,8,CAR,0.9425,0.92
+Unknown,fc,8,CAV,0.92,0.87
+Unknown,tqlayer_n,8,CAR,1.0,0.97
+Unknown,tqlayer_n,8,CAV,0.9325,0.9
+Unknown,tqlayer_n_remain,8,CAR,0.8975,0.83
+Unknown,tqlayer_n_remain,8,CAV,0.805,0.74
+Unknown,out,8,CAR,0.8075,0.74
+Unknown,out,8,CAV,0.805,0.74
+Unknown,fc,9,CAR,0.945,0.94
+Unknown,fc,9,CAV,0.91,0.9
+Unknown,tqlayer_n,9,CAR,0.99,0.94
+Unknown,tqlayer_n,9,CAV,0.93,0.91
+Unknown,tqlayer_n_remain,9,CAR,0.9075,0.9
+Unknown,tqlayer_n_remain,9,CAV,0.825,0.81
+Unknown,out,9,CAR,0.8025,0.82
+Unknown,out,9,CAV,0.7975,0.82
+Unknown,fc,10,CAR,0.9475,0.89
+Unknown,fc,10,CAV,0.92,0.84
+Unknown,tqlayer_n,10,CAR,0.995,0.9
+Unknown,tqlayer_n,10,CAV,0.9275,0.87
+Unknown,tqlayer_n_remain,10,CAR,0.925,0.87
+Unknown,tqlayer_n_remain,10,CAV,0.865,0.8
+Unknown,out,10,CAR,0.8225,0.76
+Unknown,out,10,CAV,0.8225,0.76

@@ -1,0 +1,33 @@
+Concept,Layer,Method,p-value
+Supraventricular,fc,CAR,0.009900990099009901
+Supraventricular,fc,CAV,0.009900990099009901
+Supraventricular,tqlayer_n,CAR,0.009900990099009901
+Supraventricular,tqlayer_n,CAV,0.009900990099009901
+Supraventricular,tqlayer_n_remain,CAR,0.009900990099009901
+Supraventricular,tqlayer_n_remain,CAV,0.009900990099009901
+Supraventricular,out,CAR,0.009900990099009901
+Supraventricular,out,CAV,0.009900990099009901
+Premature Ventricular,fc,CAR,0.009900990099009901
+Premature Ventricular,fc,CAV,0.009900990099009901
+Premature Ventricular,tqlayer_n,CAR,0.009900990099009901
+Premature Ventricular,tqlayer_n,CAV,0.009900990099009901
+Premature Ventricular,tqlayer_n_remain,CAR,0.009900990099009901
+Premature Ventricular,tqlayer_n_remain,CAV,0.009900990099009901
+Premature Ventricular,out,CAR,0.009900990099009901
+Premature Ventricular,out,CAV,0.009900990099009901
+Fusion Beats,fc,CAR,0.009900990099009901
+Fusion Beats,fc,CAV,0.009900990099009901
+Fusion Beats,tqlayer_n,CAR,0.009900990099009901
+Fusion Beats,tqlayer_n,CAV,0.009900990099009901
+Fusion Beats,tqlayer_n_remain,CAR,0.009900990099009901
+Fusion Beats,tqlayer_n_remain,CAV,0.009900990099009901
+Fusion Beats,out,CAR,0.009900990099009901
+Fusion Beats,out,CAV,0.009900990099009901
+Unknown,fc,CAR,0.009900990099009901
+Unknown,fc,CAV,0.009900990099009901
+Unknown,tqlayer_n,CAR,0.009900990099009901
+Unknown,tqlayer_n,CAV,0.009900990099009901
+Unknown,tqlayer_n_remain,CAR,0.009900990099009901
+Unknown,tqlayer_n_remain,CAV,0.009900990099009901
+Unknown,out,CAR,0.009900990099009901
+Unknown,out,CAV,0.009900990099009901

@@ -1,0 +1,401 @@
+Set,Concept,Seed,Kernel,Accuracy
+Training,Loop,1,Gaussian RBF,0.995
+Validation,Loop,1,Gaussian RBF,1.0
+Training,Loop,1,Linear,0.875
+Validation,Loop,1,Linear,0.84
+Training,Loop,1,Polynomial,0.9875
+Validation,Loop,1,Polynomial,0.97
+Training,Loop,1,Sigmoid,0.705
+Validation,Loop,1,Sigmoid,0.61
+Training,Loop,1,Matern,1.0
+Validation,Loop,1,Matern,0.66
+Training,Loop,2,Gaussian RBF,0.9925
+Validation,Loop,2,Gaussian RBF,1.0
+Training,Loop,2,Linear,0.875
+Validation,Loop,2,Linear,0.86
+Training,Loop,2,Polynomial,0.9575
+Validation,Loop,2,Polynomial,0.97
+Training,Loop,2,Sigmoid,0.725
+Validation,Loop,2,Sigmoid,0.74
+Training,Loop,2,Matern,1.0
+Validation,Loop,2,Matern,0.72
+Training,Loop,3,Gaussian RBF,0.995
+Validation,Loop,3,Gaussian RBF,0.99
+Training,Loop,3,Linear,0.885
+Validation,Loop,3,Linear,0.83
+Training,Loop,3,Polynomial,0.9725
+Validation,Loop,3,Polynomial,0.99
+Training,Loop,3,Sigmoid,0.7425
+Validation,Loop,3,Sigmoid,0.77
+Training,Loop,3,Matern,1.0
+Validation,Loop,3,Matern,0.79
+Training,Loop,4,Gaussian RBF,0.99
+Validation,Loop,4,Gaussian RBF,0.99
+Training,Loop,4,Linear,0.8875
+Validation,Loop,4,Linear,0.86
+Training,Loop,4,Polynomial,0.97
+Validation,Loop,4,Polynomial,0.98
+Training,Loop,4,Sigmoid,0.73
+Validation,Loop,4,Sigmoid,0.7
+Training,Loop,4,Matern,1.0
+Validation,Loop,4,Matern,0.7
+Training,Loop,5,Gaussian RBF,0.985
+Validation,Loop,5,Gaussian RBF,0.96
+Training,Loop,5,Linear,0.86
+Validation,Loop,5,Linear,0.88
+Training,Loop,5,Polynomial,0.97
+Validation,Loop,5,Polynomial,0.94
+Training,Loop,5,Sigmoid,0.7025
+Validation,Loop,5,Sigmoid,0.73
+Training,Loop,5,Matern,1.0
+Validation,Loop,5,Matern,0.66
+Training,Loop,6,Gaussian RBF,0.9875
+Validation,Loop,6,Gaussian RBF,1.0
+Training,Loop,6,Linear,0.8875
+Validation,Loop,6,Linear,0.94
+Training,Loop,6,Polynomial,0.96
+Validation,Loop,6,Polynomial,0.99
+Training,Loop,6,Sigmoid,0.7575
+Validation,Loop,6,Sigmoid,0.82
+Training,Loop,6,Matern,1.0
+Validation,Loop,6,Matern,0.7
+Training,Loop,7,Gaussian RBF,0.995
+Validation,Loop,7,Gaussian RBF,0.99
+Training,Loop,7,Linear,0.9075
+Validation,Loop,7,Linear,0.82
+Training,Loop,7,Polynomial,0.985
+Validation,Loop,7,Polynomial,0.95
+Training,Loop,7,Sigmoid,0.695
+Validation,Loop,7,Sigmoid,0.65
+Training,Loop,7,Matern,1.0
+Validation,Loop,7,Matern,0.69
+Training,Loop,8,Gaussian RBF,0.995
+Validation,Loop,8,Gaussian RBF,0.99
+Training,Loop,8,Linear,0.8925
+Validation,Loop,8,Linear,0.89
+Training,Loop,8,Polynomial,0.99
+Validation,Loop,8,Polynomial,0.99
+Training,Loop,8,Sigmoid,0.645
+Validation,Loop,8,Sigmoid,0.72
+Training,Loop,8,Matern,1.0
+Validation,Loop,8,Matern,0.77
+Training,Loop,9,Gaussian RBF,0.98
+Validation,Loop,9,Gaussian RBF,0.99
+Training,Loop,9,Linear,0.87
+Validation,Loop,9,Linear,0.83
+Training,Loop,9,Polynomial,0.9775
+Validation,Loop,9,Polynomial,0.97
+Training,Loop,9,Sigmoid,0.6775
+Validation,Loop,9,Sigmoid,0.65
+Training,Loop,9,Matern,1.0
+Validation,Loop,9,Matern,0.63
+Training,Loop,10,Gaussian RBF,0.9875
+Validation,Loop,10,Gaussian RBF,1.0
+Training,Loop,10,Linear,0.84
+Validation,Loop,10,Linear,0.83
+Training,Loop,10,Polynomial,0.975
+Validation,Loop,10,Polynomial,0.98
+Training,Loop,10,Sigmoid,0.6675
+Validation,Loop,10,Sigmoid,0.63
+Training,Loop,10,Matern,1.0
+Validation,Loop,10,Matern,0.68
+Training,Vertical Line,1,Gaussian RBF,0.995
+Validation,Vertical Line,1,Gaussian RBF,1.0
+Training,Vertical Line,1,Linear,0.995
+Validation,Vertical Line,1,Linear,1.0
+Training,Vertical Line,1,Polynomial,0.9875
+Validation,Vertical Line,1,Polynomial,1.0
+Training,Vertical Line,1,Sigmoid,0.97
+Validation,Vertical Line,1,Sigmoid,0.95
+Training,Vertical Line,1,Matern,1.0
+Validation,Vertical Line,1,Matern,0.78
+Training,Vertical Line,2,Gaussian RBF,0.9925
+Validation,Vertical Line,2,Gaussian RBF,1.0
+Training,Vertical Line,2,Linear,0.9875
+Validation,Vertical Line,2,Linear,0.99
+Training,Vertical Line,2,Polynomial,0.9825
+Validation,Vertical Line,2,Polynomial,0.96
+Training,Vertical Line,2,Sigmoid,0.9475
+Validation,Vertical Line,2,Sigmoid,0.94
+Training,Vertical Line,2,Matern,1.0
+Validation,Vertical Line,2,Matern,0.69
+Training,Vertical Line,3,Gaussian RBF,1.0
+Validation,Vertical Line,3,Gaussian RBF,1.0
+Training,Vertical Line,3,Linear,1.0
+Validation,Vertical Line,3,Linear,0.99
+Training,Vertical Line,3,Polynomial,0.985
+Validation,Vertical Line,3,Polynomial,0.98
+Training,Vertical Line,3,Sigmoid,0.93
+Validation,Vertical Line,3,Sigmoid,0.94
+Training,Vertical Line,3,Matern,1.0
+Validation,Vertical Line,3,Matern,0.69
+Training,Vertical Line,4,Gaussian RBF,1.0
+Validation,Vertical Line,4,Gaussian RBF,0.98
+Training,Vertical Line,4,Linear,1.0
+Validation,Vertical Line,4,Linear,0.97
+Training,Vertical Line,4,Polynomial,0.995
+Validation,Vertical Line,4,Polynomial,0.99
+Training,Vertical Line,4,Sigmoid,0.9425
+Validation,Vertical Line,4,Sigmoid,0.92
+Training,Vertical Line,4,Matern,1.0
+Validation,Vertical Line,4,Matern,0.75
+Training,Vertical Line,5,Gaussian RBF,0.9975
+Validation,Vertical Line,5,Gaussian RBF,1.0
+Training,Vertical Line,5,Linear,1.0
+Validation,Vertical Line,5,Linear,0.96
+Training,Vertical Line,5,Polynomial,0.985
+Validation,Vertical Line,5,Polynomial,0.98
+Training,Vertical Line,5,Sigmoid,0.9525
+Validation,Vertical Line,5,Sigmoid,0.92
+Training,Vertical Line,5,Matern,1.0
+Validation,Vertical Line,5,Matern,0.67
+Training,Vertical Line,6,Gaussian RBF,0.995
+Validation,Vertical Line,6,Gaussian RBF,0.99
+Training,Vertical Line,6,Linear,0.9875
+Validation,Vertical Line,6,Linear,0.95
+Training,Vertical Line,6,Polynomial,0.9875
+Validation,Vertical Line,6,Polynomial,0.99
+Training,Vertical Line,6,Sigmoid,0.915
+Validation,Vertical Line,6,Sigmoid,0.91
+Training,Vertical Line,6,Matern,1.0
+Validation,Vertical Line,6,Matern,0.76
+Training,Vertical Line,7,Gaussian RBF,0.9975
+Validation,Vertical Line,7,Gaussian RBF,0.99
+Training,Vertical Line,7,Linear,0.995
+Validation,Vertical Line,7,Linear,0.99
+Training,Vertical Line,7,Polynomial,0.9875
+Validation,Vertical Line,7,Polynomial,1.0
+Training,Vertical Line,7,Sigmoid,0.9725
+Validation,Vertical Line,7,Sigmoid,0.95
+Training,Vertical Line,7,Matern,1.0
+Validation,Vertical Line,7,Matern,0.77
+Training,Vertical Line,8,Gaussian RBF,0.9975
+Validation,Vertical Line,8,Gaussian RBF,1.0
+Training,Vertical Line,8,Linear,0.99
+Validation,Vertical Line,8,Linear,1.0
+Training,Vertical Line,8,Polynomial,0.995
+Validation,Vertical Line,8,Polynomial,1.0
+Training,Vertical Line,8,Sigmoid,0.9325
+Validation,Vertical Line,8,Sigmoid,0.92
+Training,Vertical Line,8,Matern,1.0
+Validation,Vertical Line,8,Matern,0.66
+Training,Vertical Line,9,Gaussian RBF,1.0
+Validation,Vertical Line,9,Gaussian RBF,1.0
+Training,Vertical Line,9,Linear,0.9875
+Validation,Vertical Line,9,Linear,0.98
+Training,Vertical Line,9,Polynomial,0.995
+Validation,Vertical Line,9,Polynomial,0.98
+Training,Vertical Line,9,Sigmoid,0.945
+Validation,Vertical Line,9,Sigmoid,0.94
+Training,Vertical Line,9,Matern,1.0
+Validation,Vertical Line,9,Matern,0.72
+Training,Vertical Line,10,Gaussian RBF,1.0
+Validation,Vertical Line,10,Gaussian RBF,0.99
+Training,Vertical Line,10,Linear,1.0
+Validation,Vertical Line,10,Linear,0.98
+Training,Vertical Line,10,Polynomial,0.99
+Validation,Vertical Line,10,Polynomial,0.99
+Training,Vertical Line,10,Sigmoid,0.94
+Validation,Vertical Line,10,Sigmoid,0.9
+Training,Vertical Line,10,Matern,1.0
+Validation,Vertical Line,10,Matern,0.68
+Training,Horizontal Line,1,Gaussian RBF,0.995
+Validation,Horizontal Line,1,Gaussian RBF,1.0
+Training,Horizontal Line,1,Linear,0.905
+Validation,Horizontal Line,1,Linear,0.92
+Training,Horizontal Line,1,Polynomial,0.945
+Validation,Horizontal Line,1,Polynomial,0.97
+Training,Horizontal Line,1,Sigmoid,0.5625
+Validation,Horizontal Line,1,Sigmoid,0.6
+Training,Horizontal Line,1,Matern,1.0
+Validation,Horizontal Line,1,Matern,0.72
+Training,Horizontal Line,2,Gaussian RBF,0.99
+Validation,Horizontal Line,2,Gaussian RBF,0.97
+Training,Horizontal Line,2,Linear,0.9025
+Validation,Horizontal Line,2,Linear,0.81
+Training,Horizontal Line,2,Polynomial,0.95
+Validation,Horizontal Line,2,Polynomial,0.92
+Training,Horizontal Line,2,Sigmoid,0.615
+Validation,Horizontal Line,2,Sigmoid,0.59
+Training,Horizontal Line,2,Matern,1.0
+Validation,Horizontal Line,2,Matern,0.79
+Training,Horizontal Line,3,Gaussian RBF,0.99
+Validation,Horizontal Line,3,Gaussian RBF,0.99
+Training,Horizontal Line,3,Linear,0.91
+Validation,Horizontal Line,3,Linear,0.89
+Training,Horizontal Line,3,Polynomial,0.955
+Validation,Horizontal Line,3,Polynomial,0.93
+Training,Horizontal Line,3,Sigmoid,0.635
+Validation,Horizontal Line,3,Sigmoid,0.59
+Training,Horizontal Line,3,Matern,1.0
+Validation,Horizontal Line,3,Matern,0.76
+Training,Horizontal Line,4,Gaussian RBF,0.99
+Validation,Horizontal Line,4,Gaussian RBF,1.0
+Training,Horizontal Line,4,Linear,0.8975
+Validation,Horizontal Line,4,Linear,0.93
+Training,Horizontal Line,4,Polynomial,0.9475
+Validation,Horizontal Line,4,Polynomial,0.97
+Training,Horizontal Line,4,Sigmoid,0.65
+Validation,Horizontal Line,4,Sigmoid,0.7
+Training,Horizontal Line,4,Matern,1.0
+Validation,Horizontal Line,4,Matern,0.8
+Training,Horizontal Line,5,Gaussian RBF,0.9875
+Validation,Horizontal Line,5,Gaussian RBF,1.0
+Training,Horizontal Line,5,Linear,0.8975
+Validation,Horizontal Line,5,Linear,0.93
+Training,Horizontal Line,5,Polynomial,0.945
+Validation,Horizontal Line,5,Polynomial,0.98
+Training,Horizontal Line,5,Sigmoid,0.63
+Validation,Horizontal Line,5,Sigmoid,0.69
+Training,Horizontal Line,5,Matern,1.0
+Validation,Horizontal Line,5,Matern,0.73
+Training,Horizontal Line,6,Gaussian RBF,0.9975
+Validation,Horizontal Line,6,Gaussian RBF,0.99
+Training,Horizontal Line,6,Linear,0.9325
+Validation,Horizontal Line,6,Linear,0.86
+Training,Horizontal Line,6,Polynomial,0.965
+Validation,Horizontal Line,6,Polynomial,0.96
+Training,Horizontal Line,6,Sigmoid,0.71
+Validation,Horizontal Line,6,Sigmoid,0.65
+Training,Horizontal Line,6,Matern,1.0
+Validation,Horizontal Line,6,Matern,0.74
+Training,Horizontal Line,7,Gaussian RBF,0.9875
+Validation,Horizontal Line,7,Gaussian RBF,0.99
+Training,Horizontal Line,7,Linear,0.8725
+Validation,Horizontal Line,7,Linear,0.84
+Training,Horizontal Line,7,Polynomial,0.935
+Validation,Horizontal Line,7,Polynomial,0.96
+Training,Horizontal Line,7,Sigmoid,0.5625
+Validation,Horizontal Line,7,Sigmoid,0.53
+Training,Horizontal Line,7,Matern,1.0
+Validation,Horizontal Line,7,Matern,0.87
+Training,Horizontal Line,8,Gaussian RBF,0.9875
+Validation,Horizontal Line,8,Gaussian RBF,0.98
+Training,Horizontal Line,8,Linear,0.9
+Validation,Horizontal Line,8,Linear,0.9
+Training,Horizontal Line,8,Polynomial,0.9525
+Validation,Horizontal Line,8,Polynomial,0.89
+Training,Horizontal Line,8,Sigmoid,0.625
+Validation,Horizontal Line,8,Sigmoid,0.64
+Training,Horizontal Line,8,Matern,1.0
+Validation,Horizontal Line,8,Matern,0.92
+Training,Horizontal Line,9,Gaussian RBF,0.995
+Validation,Horizontal Line,9,Gaussian RBF,0.99
+Training,Horizontal Line,9,Linear,0.8925
+Validation,Horizontal Line,9,Linear,0.91
+Training,Horizontal Line,9,Polynomial,0.9625
+Validation,Horizontal Line,9,Polynomial,0.96
+Training,Horizontal Line,9,Sigmoid,0.59
+Validation,Horizontal Line,9,Sigmoid,0.51
+Training,Horizontal Line,9,Matern,1.0
+Validation,Horizontal Line,9,Matern,0.81
+Training,Horizontal Line,10,Gaussian RBF,0.9875
+Validation,Horizontal Line,10,Gaussian RBF,1.0
+Training,Horizontal Line,10,Linear,0.91
+Validation,Horizontal Line,10,Linear,0.9
+Training,Horizontal Line,10,Polynomial,0.965
+Validation,Horizontal Line,10,Polynomial,0.98
+Training,Horizontal Line,10,Sigmoid,0.6775
+Validation,Horizontal Line,10,Sigmoid,0.59
+Training,Horizontal Line,10,Matern,1.0
+Validation,Horizontal Line,10,Matern,0.78
+Training,Curvature,1,Gaussian RBF,0.99
+Validation,Curvature,1,Gaussian RBF,1.0
+Training,Curvature,1,Linear,0.9825
+Validation,Curvature,1,Linear,1.0
+Training,Curvature,1,Polynomial,0.985
+Validation,Curvature,1,Polynomial,0.99
+Training,Curvature,1,Sigmoid,0.925
+Validation,Curvature,1,Sigmoid,0.94
+Training,Curvature,1,Matern,1.0
+Validation,Curvature,1,Matern,0.72
+Training,Curvature,2,Gaussian RBF,0.9925
+Validation,Curvature,2,Gaussian RBF,0.98
+Training,Curvature,2,Linear,0.99
+Validation,Curvature,2,Linear,0.98
+Training,Curvature,2,Polynomial,0.9825
+Validation,Curvature,2,Polynomial,0.99
+Training,Curvature,2,Sigmoid,0.9275
+Validation,Curvature,2,Sigmoid,0.93
+Training,Curvature,2,Matern,1.0
+Validation,Curvature,2,Matern,0.74
+Training,Curvature,3,Gaussian RBF,0.995
+Validation,Curvature,3,Gaussian RBF,0.99
+Training,Curvature,3,Linear,0.99
+Validation,Curvature,3,Linear,0.97
+Training,Curvature,3,Polynomial,0.98
+Validation,Curvature,3,Polynomial,0.92
+Training,Curvature,3,Sigmoid,0.9375
+Validation,Curvature,3,Sigmoid,0.89
+Training,Curvature,3,Matern,1.0
+Validation,Curvature,3,Matern,0.69
+Training,Curvature,4,Gaussian RBF,0.9925
+Validation,Curvature,4,Gaussian RBF,1.0
+Training,Curvature,4,Linear,0.9825
+Validation,Curvature,4,Linear,0.99
+Training,Curvature,4,Polynomial,0.9875
+Validation,Curvature,4,Polynomial,0.99
+Training,Curvature,4,Sigmoid,0.94
+Validation,Curvature,4,Sigmoid,0.95
+Training,Curvature,4,Matern,1.0
+Validation,Curvature,4,Matern,0.73
+Training,Curvature,5,Gaussian RBF,1.0
+Validation,Curvature,5,Gaussian RBF,0.99
+Training,Curvature,5,Linear,0.99
+Validation,Curvature,5,Linear,0.98
+Training,Curvature,5,Polynomial,0.985
+Validation,Curvature,5,Polynomial,0.99
+Training,Curvature,5,Sigmoid,0.955
+Validation,Curvature,5,Sigmoid,0.92
+Training,Curvature,5,Matern,1.0
+Validation,Curvature,5,Matern,0.74
+Training,Curvature,6,Gaussian RBF,0.995
+Validation,Curvature,6,Gaussian RBF,0.99
+Training,Curvature,6,Linear,0.99
+Validation,Curvature,6,Linear,0.99
+Training,Curvature,6,Polynomial,0.985
+Validation,Curvature,6,Polynomial,1.0
+Training,Curvature,6,Sigmoid,0.9425
+Validation,Curvature,6,Sigmoid,0.9
+Training,Curvature,6,Matern,1.0
+Validation,Curvature,6,Matern,0.77
+Training,Curvature,7,Gaussian RBF,0.99
+Validation,Curvature,7,Gaussian RBF,0.99
+Training,Curvature,7,Linear,0.98
+Validation,Curvature,7,Linear,1.0
+Training,Curvature,7,Polynomial,0.9775
+Validation,Curvature,7,Polynomial,0.98
+Training,Curvature,7,Sigmoid,0.925
+Validation,Curvature,7,Sigmoid,0.91
+Training,Curvature,7,Matern,1.0
+Validation,Curvature,7,Matern,0.67
+Training,Curvature,8,Gaussian RBF,0.99
+Validation,Curvature,8,Gaussian RBF,1.0
+Training,Curvature,8,Linear,0.9875
+Validation,Curvature,8,Linear,0.99
+Training,Curvature,8,Polynomial,0.9825
+Validation,Curvature,8,Polynomial,0.99
+Training,Curvature,8,Sigmoid,0.9225
+Validation,Curvature,8,Sigmoid,0.96
+Training,Curvature,8,Matern,1.0
+Validation,Curvature,8,Matern,0.8
+Training,Curvature,9,Gaussian RBF,0.9975
+Validation,Curvature,9,Gaussian RBF,1.0
+Training,Curvature,9,Linear,1.0
+Validation,Curvature,9,Linear,0.99
+Training,Curvature,9,Polynomial,0.9925
+Validation,Curvature,9,Polynomial,0.99
+Training,Curvature,9,Sigmoid,0.9425
+Validation,Curvature,9,Sigmoid,0.91
+Training,Curvature,9,Matern,1.0
+Validation,Curvature,9,Matern,0.76
+Training,Curvature,10,Gaussian RBF,0.9925
+Validation,Curvature,10,Gaussian RBF,0.98
+Training,Curvature,10,Linear,0.985
+Validation,Curvature,10,Linear,0.99
+Training,Curvature,10,Polynomial,0.9875
+Validation,Curvature,10,Polynomial,0.99
+Training,Curvature,10,Sigmoid,0.9525
+Validation,Curvature,10,Sigmoid,0.93
+Training,Curvature,10,Matern,1.0
+Validation,Curvature,10,Matern,0.74

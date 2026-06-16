@@ -1,0 +1,321 @@
+Concept,Layer,Seed,Method,Train ACC,Test ACC
+Loop,Conv1,1,CAR,1.0,0.97
+Loop,Conv1,1,CAV,1.0,0.91
+Loop,Conv2,1,CAR,1.0,1.0
+Loop,Conv2,1,CAV,1.0,1.0
+Loop,Lin1,1,CAR,0.9975,1.0
+Loop,Lin1,1,CAV,0.8775,0.9
+Loop,Lin2,1,CAR,0.995,1.0
+Loop,Lin2,1,CAV,0.845,0.87
+Loop,Conv1,2,CAR,0.99,0.94
+Loop,Conv1,2,CAV,1.0,0.93
+Loop,Conv2,2,CAR,1.0,0.98
+Loop,Conv2,2,CAV,1.0,0.98
+Loop,Lin1,2,CAR,0.9925,0.99
+Loop,Lin1,2,CAV,0.8475,0.86
+Loop,Lin2,2,CAR,0.9925,0.99
+Loop,Lin2,2,CAV,0.7,0.68
+Loop,Conv1,3,CAR,0.99,0.98
+Loop,Conv1,3,CAV,0.9975,0.94
+Loop,Conv2,3,CAR,1.0,1.0
+Loop,Conv2,3,CAV,1.0,0.99
+Loop,Lin1,3,CAR,0.995,1.0
+Loop,Lin1,3,CAV,0.8425,0.93
+Loop,Lin2,3,CAR,0.995,1.0
+Loop,Lin2,3,CAV,0.8725,0.9
+Loop,Conv1,4,CAR,0.9825,0.91
+Loop,Conv1,4,CAV,1.0,0.94
+Loop,Conv2,4,CAR,1.0,0.99
+Loop,Conv2,4,CAV,1.0,0.98
+Loop,Lin1,4,CAR,0.99,0.99
+Loop,Lin1,4,CAV,0.83,0.76
+Loop,Lin2,4,CAR,0.99,0.99
+Loop,Lin2,4,CAV,0.7825,0.74
+Loop,Conv1,5,CAR,0.995,0.93
+Loop,Conv1,5,CAV,1.0,0.92
+Loop,Conv2,5,CAR,0.9975,1.0
+Loop,Conv2,5,CAV,1.0,0.98
+Loop,Lin1,5,CAR,0.99,1.0
+Loop,Lin1,5,CAV,0.8625,0.87
+Loop,Lin2,5,CAR,0.99,1.0
+Loop,Lin2,5,CAV,0.825,0.8
+Loop,Conv1,6,CAR,0.9925,0.96
+Loop,Conv1,6,CAV,1.0,0.9
+Loop,Conv2,6,CAR,1.0,0.99
+Loop,Conv2,6,CAV,1.0,0.97
+Loop,Lin1,6,CAR,0.99,0.98
+Loop,Lin1,6,CAV,0.8625,0.91
+Loop,Lin2,6,CAR,0.99,0.98
+Loop,Lin2,6,CAV,0.76,0.75
+Loop,Conv1,7,CAR,0.9925,0.98
+Loop,Conv1,7,CAV,1.0,0.95
+Loop,Conv2,7,CAR,1.0,0.99
+Loop,Conv2,7,CAV,0.9975,0.98
+Loop,Lin1,7,CAR,0.9975,0.99
+Loop,Lin1,7,CAV,0.92,0.91
+Loop,Lin2,7,CAR,0.995,0.99
+Loop,Lin2,7,CAV,0.8325,0.85
+Loop,Conv1,8,CAR,0.995,0.91
+Loop,Conv1,8,CAV,0.9975,0.91
+Loop,Conv2,8,CAR,1.0,0.97
+Loop,Conv2,8,CAV,1.0,1.0
+Loop,Lin1,8,CAR,0.995,0.99
+Loop,Lin1,8,CAV,0.875,0.85
+Loop,Lin2,8,CAR,0.995,0.99
+Loop,Lin2,8,CAV,0.845,0.74
+Loop,Conv1,9,CAR,0.9925,0.93
+Loop,Conv1,9,CAV,0.9975,0.92
+Loop,Conv2,9,CAR,0.995,0.96
+Loop,Conv2,9,CAV,1.0,0.96
+Loop,Lin1,9,CAR,0.9925,0.96
+Loop,Lin1,9,CAV,0.845,0.88
+Loop,Lin2,9,CAR,0.99,0.96
+Loop,Lin2,9,CAV,0.7375,0.77
+Loop,Conv1,10,CAR,0.9925,0.93
+Loop,Conv1,10,CAV,0.9975,0.92
+Loop,Conv2,10,CAR,0.9975,0.98
+Loop,Conv2,10,CAV,1.0,0.97
+Loop,Lin1,10,CAR,0.9875,1.0
+Loop,Lin1,10,CAV,0.91,0.85
+Loop,Lin2,10,CAR,0.9875,1.0
+Loop,Lin2,10,CAV,0.895,0.89
+Vertical Line,Conv1,1,CAR,0.995,0.99
+Vertical Line,Conv1,1,CAV,1.0,0.95
+Vertical Line,Conv2,1,CAR,1.0,1.0
+Vertical Line,Conv2,1,CAV,1.0,0.98
+Vertical Line,Lin1,1,CAR,1.0,0.99
+Vertical Line,Lin1,1,CAV,0.9825,0.98
+Vertical Line,Lin2,1,CAR,1.0,0.99
+Vertical Line,Lin2,1,CAV,0.9825,0.98
+Vertical Line,Conv1,2,CAR,0.99,0.98
+Vertical Line,Conv1,2,CAV,1.0,0.96
+Vertical Line,Conv2,2,CAR,1.0,0.99
+Vertical Line,Conv2,2,CAV,1.0,0.99
+Vertical Line,Lin1,2,CAR,0.995,0.99
+Vertical Line,Lin1,2,CAV,0.985,1.0
+Vertical Line,Lin2,2,CAR,0.9975,0.99
+Vertical Line,Lin2,2,CAV,0.9875,1.0
+Vertical Line,Conv1,3,CAR,0.985,0.96
+Vertical Line,Conv1,3,CAV,1.0,0.94
+Vertical Line,Conv2,3,CAR,0.9975,1.0
+Vertical Line,Conv2,3,CAV,1.0,0.98
+Vertical Line,Lin1,3,CAR,0.995,1.0
+Vertical Line,Lin1,3,CAV,0.9875,0.99
+Vertical Line,Lin2,3,CAR,0.995,1.0
+Vertical Line,Lin2,3,CAV,0.99,0.99
+Vertical Line,Conv1,4,CAR,0.9975,0.99
+Vertical Line,Conv1,4,CAV,1.0,0.96
+Vertical Line,Conv2,4,CAR,0.9975,0.99
+Vertical Line,Conv2,4,CAV,1.0,0.99
+Vertical Line,Lin1,4,CAR,0.995,1.0
+Vertical Line,Lin1,4,CAV,0.98,0.98
+Vertical Line,Lin2,4,CAR,0.995,1.0
+Vertical Line,Lin2,4,CAV,0.985,0.98
+Vertical Line,Conv1,5,CAR,1.0,0.97
+Vertical Line,Conv1,5,CAV,1.0,0.94
+Vertical Line,Conv2,5,CAR,1.0,1.0
+Vertical Line,Conv2,5,CAV,0.9975,0.99
+Vertical Line,Lin1,5,CAR,1.0,1.0
+Vertical Line,Lin1,5,CAV,0.9875,0.99
+Vertical Line,Lin2,5,CAR,1.0,1.0
+Vertical Line,Lin2,5,CAV,0.985,0.98
+Vertical Line,Conv1,6,CAR,0.99,0.97
+Vertical Line,Conv1,6,CAV,1.0,0.97
+Vertical Line,Conv2,6,CAR,1.0,0.99
+Vertical Line,Conv2,6,CAV,1.0,1.0
+Vertical Line,Lin1,6,CAR,0.9975,0.99
+Vertical Line,Lin1,6,CAV,0.9875,0.98
+Vertical Line,Lin2,6,CAR,0.9975,0.99
+Vertical Line,Lin2,6,CAV,0.9825,0.98
+Vertical Line,Conv1,7,CAR,0.99,0.95
+Vertical Line,Conv1,7,CAV,1.0,0.97
+Vertical Line,Conv2,7,CAR,0.995,0.99
+Vertical Line,Conv2,7,CAV,1.0,0.96
+Vertical Line,Lin1,7,CAR,0.995,0.98
+Vertical Line,Lin1,7,CAV,0.9825,0.96
+Vertical Line,Lin2,7,CAR,0.995,0.98
+Vertical Line,Lin2,7,CAV,0.9725,0.96
+Vertical Line,Conv1,8,CAR,0.99,0.95
+Vertical Line,Conv1,8,CAV,1.0,0.95
+Vertical Line,Conv2,8,CAR,1.0,1.0
+Vertical Line,Conv2,8,CAV,1.0,1.0
+Vertical Line,Lin1,8,CAR,1.0,1.0
+Vertical Line,Lin1,8,CAV,0.9925,0.95
+Vertical Line,Lin2,8,CAR,1.0,1.0
+Vertical Line,Lin2,8,CAV,0.9875,0.96
+Vertical Line,Conv1,9,CAR,0.995,0.98
+Vertical Line,Conv1,9,CAV,0.995,0.92
+Vertical Line,Conv2,9,CAR,0.9975,0.99
+Vertical Line,Conv2,9,CAV,1.0,0.99
+Vertical Line,Lin1,9,CAR,0.9975,1.0
+Vertical Line,Lin1,9,CAV,0.99,1.0
+Vertical Line,Lin2,9,CAR,0.995,1.0
+Vertical Line,Lin2,9,CAV,0.985,0.99
+Vertical Line,Conv1,10,CAR,0.99,0.95
+Vertical Line,Conv1,10,CAV,1.0,0.96
+Vertical Line,Conv2,10,CAR,0.9975,0.98
+Vertical Line,Conv2,10,CAV,1.0,0.98
+Vertical Line,Lin1,10,CAR,1.0,1.0
+Vertical Line,Lin1,10,CAV,0.985,0.99
+Vertical Line,Lin2,10,CAR,1.0,1.0
+Vertical Line,Lin2,10,CAV,0.99,0.99
+Horizontal Line,Conv1,1,CAR,0.9925,0.9
+Horizontal Line,Conv1,1,CAV,1.0,0.86
+Horizontal Line,Conv2,1,CAR,1.0,0.95
+Horizontal Line,Conv2,1,CAV,0.995,0.92
+Horizontal Line,Lin1,1,CAR,0.995,0.98
+Horizontal Line,Lin1,1,CAV,0.825,0.87
+Horizontal Line,Lin2,1,CAR,0.995,0.98
+Horizontal Line,Lin2,1,CAV,0.8425,0.84
+Horizontal Line,Conv1,2,CAR,0.9925,0.92
+Horizontal Line,Conv1,2,CAV,0.975,0.91
+Horizontal Line,Conv2,2,CAR,1.0,0.99
+Horizontal Line,Conv2,2,CAV,1.0,0.97
+Horizontal Line,Lin1,2,CAR,0.995,1.0
+Horizontal Line,Lin1,2,CAV,0.9025,0.9
+Horizontal Line,Lin2,2,CAR,0.995,1.0
+Horizontal Line,Lin2,2,CAV,0.8425,0.85
+Horizontal Line,Conv1,3,CAR,0.99,0.91
+Horizontal Line,Conv1,3,CAV,0.9975,0.9
+Horizontal Line,Conv2,3,CAR,1.0,0.97
+Horizontal Line,Conv2,3,CAV,1.0,0.99
+Horizontal Line,Lin1,3,CAR,0.9925,0.98
+Horizontal Line,Lin1,3,CAV,0.8675,0.86
+Horizontal Line,Lin2,3,CAR,0.9925,0.98
+Horizontal Line,Lin2,3,CAV,0.8425,0.78
+Horizontal Line,Conv1,4,CAR,0.995,0.98
+Horizontal Line,Conv1,4,CAV,0.96,0.89
+Horizontal Line,Conv2,4,CAR,1.0,1.0
+Horizontal Line,Conv2,4,CAV,1.0,1.0
+Horizontal Line,Lin1,4,CAR,0.9925,1.0
+Horizontal Line,Lin1,4,CAV,0.8825,0.9
+Horizontal Line,Lin2,4,CAR,0.9925,1.0
+Horizontal Line,Lin2,4,CAV,0.8325,0.83
+Horizontal Line,Conv1,5,CAR,0.985,0.95
+Horizontal Line,Conv1,5,CAV,1.0,0.97
+Horizontal Line,Conv2,5,CAR,0.9975,0.99
+Horizontal Line,Conv2,5,CAV,0.9975,0.97
+Horizontal Line,Lin1,5,CAR,0.99,0.99
+Horizontal Line,Lin1,5,CAV,0.875,0.87
+Horizontal Line,Lin2,5,CAR,0.99,0.99
+Horizontal Line,Lin2,5,CAV,0.855,0.79
+Horizontal Line,Conv1,6,CAR,0.9925,0.93
+Horizontal Line,Conv1,6,CAV,0.9825,0.92
+Horizontal Line,Conv2,6,CAR,1.0,0.98
+Horizontal Line,Conv2,6,CAV,1.0,0.98
+Horizontal Line,Lin1,6,CAR,0.9975,1.0
+Horizontal Line,Lin1,6,CAV,0.8825,0.86
+Horizontal Line,Lin2,6,CAR,0.9975,1.0
+Horizontal Line,Lin2,6,CAV,0.87,0.87
+Horizontal Line,Conv1,7,CAR,0.985,0.99
+Horizontal Line,Conv1,7,CAV,0.9575,0.9
+Horizontal Line,Conv2,7,CAR,0.9975,0.98
+Horizontal Line,Conv2,7,CAV,1.0,0.96
+Horizontal Line,Lin1,7,CAR,0.985,1.0
+Horizontal Line,Lin1,7,CAV,0.855,0.84
+Horizontal Line,Lin2,7,CAR,0.985,0.99
+Horizontal Line,Lin2,7,CAV,0.8475,0.85
+Horizontal Line,Conv1,8,CAR,0.995,0.94
+Horizontal Line,Conv1,8,CAV,1.0,0.93
+Horizontal Line,Conv2,8,CAR,1.0,0.98
+Horizontal Line,Conv2,8,CAV,1.0,0.97
+Horizontal Line,Lin1,8,CAR,0.99,1.0
+Horizontal Line,Lin1,8,CAV,0.86,0.84
+Horizontal Line,Lin2,8,CAR,0.9875,0.99
+Horizontal Line,Lin2,8,CAV,0.81,0.8
+Horizontal Line,Conv1,9,CAR,0.9825,0.92
+Horizontal Line,Conv1,9,CAV,1.0,0.93
+Horizontal Line,Conv2,9,CAR,0.9975,0.96
+Horizontal Line,Conv2,9,CAV,1.0,0.97
+Horizontal Line,Lin1,9,CAR,0.99,0.97
+Horizontal Line,Lin1,9,CAV,0.8625,0.82
+Horizontal Line,Lin2,9,CAR,0.99,0.97
+Horizontal Line,Lin2,9,CAV,0.875,0.84
+Horizontal Line,Conv1,10,CAR,0.9975,0.91
+Horizontal Line,Conv1,10,CAV,0.9975,0.91
+Horizontal Line,Conv2,10,CAR,1.0,0.97
+Horizontal Line,Conv2,10,CAV,1.0,0.97
+Horizontal Line,Lin1,10,CAR,0.995,0.98
+Horizontal Line,Lin1,10,CAV,0.8975,0.85
+Horizontal Line,Lin2,10,CAR,0.995,0.98
+Horizontal Line,Lin2,10,CAV,0.88,0.84
+Curvature,Conv1,1,CAR,0.9925,0.92
+Curvature,Conv1,1,CAV,1.0,0.96
+Curvature,Conv2,1,CAR,1.0,0.98
+Curvature,Conv2,1,CAV,1.0,0.98
+Curvature,Lin1,1,CAR,0.9975,0.99
+Curvature,Lin1,1,CAV,0.9925,0.99
+Curvature,Lin2,1,CAR,0.9975,0.99
+Curvature,Lin2,1,CAV,0.9925,0.99
+Curvature,Conv1,2,CAR,0.9925,0.95
+Curvature,Conv1,2,CAV,1.0,0.95
+Curvature,Conv2,2,CAR,1.0,0.97
+Curvature,Conv2,2,CAV,1.0,0.94
+Curvature,Lin1,2,CAR,1.0,0.99
+Curvature,Lin1,2,CAV,0.9875,0.96
+Curvature,Lin2,2,CAR,0.9975,0.97
+Curvature,Lin2,2,CAV,0.9925,0.96
+Curvature,Conv1,3,CAR,0.9925,0.98
+Curvature,Conv1,3,CAV,0.995,0.94
+Curvature,Conv2,3,CAR,1.0,0.98
+Curvature,Conv2,3,CAV,1.0,0.97
+Curvature,Lin1,3,CAR,0.995,1.0
+Curvature,Lin1,3,CAV,0.9825,0.98
+Curvature,Lin2,3,CAR,0.995,0.99
+Curvature,Lin2,3,CAV,0.985,0.98
+Curvature,Conv1,4,CAR,0.995,0.95
+Curvature,Conv1,4,CAV,1.0,0.99
+Curvature,Conv2,4,CAR,1.0,1.0
+Curvature,Conv2,4,CAV,1.0,0.99
+Curvature,Lin1,4,CAR,0.995,1.0
+Curvature,Lin1,4,CAV,0.985,0.97
+Curvature,Lin2,4,CAR,0.995,1.0
+Curvature,Lin2,4,CAV,0.9875,0.96
+Curvature,Conv1,5,CAR,0.99,0.97
+Curvature,Conv1,5,CAV,0.9575,0.92
+Curvature,Conv2,5,CAR,1.0,0.99
+Curvature,Conv2,5,CAV,1.0,0.99
+Curvature,Lin1,5,CAR,1.0,0.99
+Curvature,Lin1,5,CAV,0.9825,0.97
+Curvature,Lin2,5,CAR,1.0,0.99
+Curvature,Lin2,5,CAV,0.9775,0.98
+Curvature,Conv1,6,CAR,0.9925,0.98
+Curvature,Conv1,6,CAV,0.9975,0.94
+Curvature,Conv2,6,CAR,1.0,1.0
+Curvature,Conv2,6,CAV,1.0,0.98
+Curvature,Lin1,6,CAR,0.9975,0.99
+Curvature,Lin1,6,CAV,0.99,0.98
+Curvature,Lin2,6,CAR,0.9975,0.98
+Curvature,Lin2,6,CAV,0.995,0.98
+Curvature,Conv1,7,CAR,0.995,0.95
+Curvature,Conv1,7,CAV,1.0,0.98
+Curvature,Conv2,7,CAR,1.0,0.98
+Curvature,Conv2,7,CAV,1.0,0.98
+Curvature,Lin1,7,CAR,1.0,0.99
+Curvature,Lin1,7,CAV,0.9825,0.96
+Curvature,Lin2,7,CAR,1.0,0.99
+Curvature,Lin2,7,CAV,0.9825,0.97
+Curvature,Conv1,8,CAR,0.995,0.96
+Curvature,Conv1,8,CAV,0.9975,0.94
+Curvature,Conv2,8,CAR,1.0,0.98
+Curvature,Conv2,8,CAV,1.0,0.99
+Curvature,Lin1,8,CAR,0.9975,1.0
+Curvature,Lin1,8,CAV,0.995,0.98
+Curvature,Lin2,8,CAR,0.9975,1.0
+Curvature,Lin2,8,CAV,0.9925,0.97
+Curvature,Conv1,9,CAR,0.995,0.98
+Curvature,Conv1,9,CAV,1.0,0.95
+Curvature,Conv2,9,CAR,0.9975,0.99
+Curvature,Conv2,9,CAV,1.0,0.99
+Curvature,Lin1,9,CAR,0.995,1.0
+Curvature,Lin1,9,CAV,0.9775,0.96
+Curvature,Lin2,9,CAR,0.995,1.0
+Curvature,Lin2,9,CAV,0.98,0.97
+Curvature,Conv1,10,CAR,0.995,0.97
+Curvature,Conv1,10,CAV,1.0,0.93
+Curvature,Conv2,10,CAR,1.0,1.0
+Curvature,Conv2,10,CAV,1.0,0.98
+Curvature,Lin1,10,CAR,0.9975,1.0
+Curvature,Lin1,10,CAV,0.9875,0.99
+Curvature,Lin2,10,CAR,0.9975,1.0
+Curvature,Lin2,10,CAV,0.9925,0.99
