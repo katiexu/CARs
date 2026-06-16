@@ -77,7 +77,7 @@ def train_mnist_model(
     latent_dim: int,
     batch_size: int,
     model_name: str = "model",
-    model_dir: Path = Path.cwd() / f"results/mnist/",
+    model_dir: Path = Path.cwd() / f"results/mnist_tq/",
     data_dir: Path = Path.cwd() / "data/mnist",
 ) -> None:
     logging.info("Fitting MNIST classifier")
@@ -110,9 +110,9 @@ def concept_accuracy(
     random_seeds: list[int],
     latent_dim: int,
     plot: bool,
-    save_dir: Path = Path.cwd() / "results/mnist/concept_accuracy",
+    save_dir: Path = Path.cwd() / "results/mnist_tq/concept_accuracy",
     data_dir: Path = Path.cwd() / "data/mnist",
-    model_dir: Path = Path.cwd() / f"results/mnist/",
+    model_dir: Path = Path.cwd() / f"results/mnist_tq/",
     model_name: str = "model",
 ) -> None:
     device = torch.device("cpu")
@@ -200,9 +200,9 @@ def concept_accuracy(
 def statistical_significance(
     random_seed: int,
     latent_dim: int,
-    save_dir: Path = Path.cwd() / "results/mnist/statistical_significance",
+    save_dir: Path = Path.cwd() / "results/mnist_tq/statistical_significance",
     data_dir: Path = Path.cwd() / "data/mnist",
-    model_dir: Path = Path.cwd() / "results/mnist",
+    model_dir: Path = Path.cwd() / "results/mnist_tq",
     model_name: str = "model",
 ) -> None:
     device = torch.device("cpu")
@@ -269,9 +269,9 @@ def global_explanations(
     batch_size: int,
     latent_dim: int,
     plot: bool,
-    save_dir: Path = Path.cwd() / "results/mnist/global_explanations",
+    save_dir: Path = Path.cwd() / "results/mnist_tq/global_explanations",
     data_dir: Path = Path.cwd() / "data/mnist",
-    model_dir: Path = Path.cwd() / f"results/mnist",
+    model_dir: Path = Path.cwd() / f"results/mnist_tq",
     model_name: str = "model",
 ) -> None:
     device = torch.device("cpu")
@@ -350,9 +350,9 @@ def feature_importance(
     batch_size: int,
     latent_dim: int,
     plot: bool,
-    save_dir: Path = Path.cwd() / "results/mnist/feature_importance",
+    save_dir: Path = Path.cwd() / "results/mnist_tq/feature_importance",
     data_dir: Path = Path.cwd() / "data/mnist",
-    model_dir: Path = Path.cwd() / f"results/mnist",
+    model_dir: Path = Path.cwd() / f"results/mnist_tq",
     model_name: str = "model",
 ) -> None:
     device = torch.device("cpu")
@@ -442,9 +442,9 @@ def kernel_sensitivity(
     random_seeds: list[int],
     latent_dim: int,
     plot: bool,
-    save_dir: Path = Path.cwd() / "results/mnist/kernel_sensitivity",
+    save_dir: Path = Path.cwd() / "results/mnist_tq/kernel_sensitivity",
     data_dir: Path = Path.cwd() / "data/mnist",
-    model_dir: Path = Path.cwd() / f"results/mnist/",
+    model_dir: Path = Path.cwd() / f"results/mnist_tq/",
     model_name: str = "model",
 ) -> None:
     device = torch.device("cpu")
@@ -526,9 +526,9 @@ def concept_size_impact(
     latent_dim: int,
     concept_sizes: list[int],
     plot: bool,
-    save_dir: Path = Path.cwd() / "results/mnist/concept_set_impact",
+    save_dir: Path = Path.cwd() / "results/mnist_tq/concept_set_impact",
     data_dir: Path = Path.cwd() / "data/mnist",
-    model_dir: Path = Path.cwd() / f"results/mnist/",
+    model_dir: Path = Path.cwd() / f"results/mnist_tq/",
     model_name: str = "model",
 ) -> None:
     device = torch.device("cpu")
@@ -610,9 +610,9 @@ def tcar_inter_concept(
     batch_size: int,
     latent_dim: int,
     plot: bool,
-    save_dir: Path = Path.cwd() / "results/mnist/tcar_inter_concept",
+    save_dir: Path = Path.cwd() / "results/mnist_tq/tcar_inter_concept",
     data_dir: Path = Path.cwd() / "data/mnist",
-    model_dir: Path = Path.cwd() / f"results/mnist",
+    model_dir: Path = Path.cwd() / f"results/mnist_tq",
     model_name: str = "model",
 ) -> None:
     device = torch.device("cpu")
@@ -669,9 +669,9 @@ def adversarial_robustness(
     random_seed: int,
     batch_size: int,
     latent_dim: int,
-    save_dir: Path = Path.cwd() / "results/mnist/adversarial_robustness",
+    save_dir: Path = Path.cwd() / "results/mnist_tq/adversarial_robustness",
     data_dir: Path = Path.cwd() / "data/mnist",
-    model_dir: Path = Path.cwd() / f"results/mnist",
+    model_dir: Path = Path.cwd() / f"results/mnist_tq",
     model_name: str = "model",
 ) -> None:
     device = torch.device("cpu")
@@ -811,7 +811,7 @@ def senn() -> None:
     senn_trainer = init_trainer(str(project_root / "configs/senn_config.json"))
     senn_trainer.run()
     senn_trainer.load_checkpoint(
-        str(Path.cwd() / "results/mnist/senn/checkpoints/best_model.pt")
+        str(Path.cwd() / "results/mnist_tq/senn/checkpoints/best_model.pt")
     )
     senn = senn_trainer.model
     senn.eval()
@@ -950,7 +950,7 @@ if __name__ == "__main__":
     #     senn()
     # else:
     #     raise ValueError(f"{args.name} is not a valid experiment name")
-    # train_mnist_model(args.latent_dim, args.batch_size, model_name=model_name)
+    train_mnist_model(args.latent_dim, args.batch_size, model_name=model_name)
     concept_accuracy(args.seeds, args.latent_dim, args.plot, model_name=model_name)
     global_explanations(args.seeds[0],args.batch_size,args.latent_dim,args.plot,model_name=model_name,)
     statistical_significance(args.seeds[0], args.latent_dim, model_name=model_name)

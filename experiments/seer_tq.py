@@ -34,7 +34,7 @@ def train_model(
     latent_dim: int,
     model_name: str,
     test_fraction: float = 0.1,
-    model_dir: Path = Path.cwd() / "results/seer",
+    model_dir: Path = Path.cwd() / "results/seer_tq",
     data_dir: Path = Path.cwd() / "data/seer",
 ):
     assert 0 < test_fraction < 1
@@ -72,9 +72,9 @@ def concept_accuracy(
     latent_dim: int,
     model_name: str,
     test_fraction: float = 0.1,
-    model_dir: Path = Path.cwd() / "results/seer",
+    model_dir: Path = Path.cwd() / "results/seer_tq",
     data_dir: Path = Path.cwd() / "data/seer",
-    save_dir: Path = Path.cwd() / "results/seer/concept_accuracy",
+    save_dir: Path = Path.cwd() / "results/seer_tq/concept_accuracy",
 ):
     torch.manual_seed(random_seed)
     # device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
@@ -150,9 +150,9 @@ def global_explanations(
     plot: bool,
     model_name: str,
     test_fraction: float = 0.1,
-    model_dir: Path = Path.cwd() / "results/seer",
+    model_dir: Path = Path.cwd() / "results/seer_tq",
     data_dir: Path = Path.cwd() / "data/seer",
-    save_dir: Path = Path.cwd() / "results/seer/global_explanations",
+    save_dir: Path = Path.cwd() / "results/seer_tq/global_explanations",
 ):
     torch.manual_seed(random_seed)
     device =torch.device("cpu")
@@ -221,9 +221,9 @@ def feature_importance(
     plot: bool,
     model_name: str,
     test_fraction: float = 0.1,
-    model_dir: Path = Path.cwd() / "results/seer",
+    model_dir: Path = Path.cwd() / "results/seer_tq",
     data_dir: Path = Path.cwd() / "data/seer",
-    save_dir: Path = Path.cwd() / "results/seer/feature_importance",
+    save_dir: Path = Path.cwd() / "results/seer_tq/feature_importance",
 ):
     torch.manual_seed(random_seed)
     device = torch.device("cpu")
@@ -334,9 +334,7 @@ if __name__ == "__main__":
     #         args.plot,
     #         model_name=model_name,
     #     )
-    # train_model(args.seeds[0], args.batch_size, args.latent_dim, model_name)
-    # concept_accuracy(
-    #     args.seeds[0], args.batch_size, args.latent_dim, model_name=model_name
-    # )
+    train_model(args.seeds[0], args.batch_size, args.latent_dim, model_name)
+    concept_accuracy(args.seeds[0], args.batch_size, args.latent_dim, model_name=model_name)
     global_explanations(args.seeds[0], args.batch_size, args.latent_dim, args.plot, model_name=model_name,)
-    # feature_importance(args.seeds[0],args.batch_size,args.latent_dim,args.plot,model_name=model_name,)
+    feature_importance(args.seeds[0],args.batch_size,args.latent_dim,args.plot,model_name=model_name,)

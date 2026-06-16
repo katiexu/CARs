@@ -1,0 +1,321 @@
+Concept,Layer,Seed,Method,Train ACC,Test ACC
+Supraventricular,Conv1,1,CAR,0.8475,0.85
+Supraventricular,Conv1,1,CAV,0.8325,0.81
+Supraventricular,Conv2,1,CAR,0.9275,0.88
+Supraventricular,Conv2,1,CAV,0.95,0.87
+Supraventricular,Conv3,1,CAR,0.94,0.89
+Supraventricular,Conv3,1,CAV,0.9875,0.85
+Supraventricular,Lin,1,CAR,0.9125,0.91
+Supraventricular,Lin,1,CAV,0.785,0.77
+Supraventricular,Conv1,2,CAR,0.87,0.88
+Supraventricular,Conv1,2,CAV,0.9025,0.87
+Supraventricular,Conv2,2,CAR,0.935,0.92
+Supraventricular,Conv2,2,CAV,0.965,0.87
+Supraventricular,Conv3,2,CAR,0.9575,0.93
+Supraventricular,Conv3,2,CAV,0.9975,0.91
+Supraventricular,Lin,2,CAR,0.9475,0.94
+Supraventricular,Lin,2,CAV,0.9,0.89
+Supraventricular,Conv1,3,CAR,0.8475,0.81
+Supraventricular,Conv1,3,CAV,0.895,0.76
+Supraventricular,Conv2,3,CAR,0.9125,0.83
+Supraventricular,Conv2,3,CAV,0.955,0.77
+Supraventricular,Conv3,3,CAR,0.9325,0.87
+Supraventricular,Conv3,3,CAV,0.99,0.8
+Supraventricular,Lin,3,CAR,0.925,0.87
+Supraventricular,Lin,3,CAV,0.825,0.74
+Supraventricular,Conv1,4,CAR,0.8775,0.81
+Supraventricular,Conv1,4,CAV,0.8725,0.79
+Supraventricular,Conv2,4,CAR,0.9425,0.85
+Supraventricular,Conv2,4,CAV,0.97,0.78
+Supraventricular,Conv3,4,CAR,0.9675,0.84
+Supraventricular,Conv3,4,CAV,1.0,0.79
+Supraventricular,Lin,4,CAR,0.9475,0.88
+Supraventricular,Lin,4,CAV,0.85,0.81
+Supraventricular,Conv1,5,CAR,0.8675,0.8
+Supraventricular,Conv1,5,CAV,0.885,0.82
+Supraventricular,Conv2,5,CAR,0.935,0.85
+Supraventricular,Conv2,5,CAV,0.97,0.8
+Supraventricular,Conv3,5,CAR,0.97,0.87
+Supraventricular,Conv3,5,CAV,1.0,0.81
+Supraventricular,Lin,5,CAR,0.9425,0.89
+Supraventricular,Lin,5,CAV,0.795,0.74
+Supraventricular,Conv1,6,CAR,0.8525,0.82
+Supraventricular,Conv1,6,CAV,0.8625,0.75
+Supraventricular,Conv2,6,CAR,0.9325,0.87
+Supraventricular,Conv2,6,CAV,0.94,0.83
+Supraventricular,Conv3,6,CAR,0.9425,0.89
+Supraventricular,Conv3,6,CAV,0.965,0.85
+Supraventricular,Lin,6,CAR,0.935,0.89
+Supraventricular,Lin,6,CAV,0.82,0.74
+Supraventricular,Conv1,7,CAR,0.8375,0.77
+Supraventricular,Conv1,7,CAV,0.8775,0.79
+Supraventricular,Conv2,7,CAR,0.9175,0.88
+Supraventricular,Conv2,7,CAV,0.9475,0.83
+Supraventricular,Conv3,7,CAR,0.9525,0.89
+Supraventricular,Conv3,7,CAV,0.975,0.83
+Supraventricular,Lin,7,CAR,0.9375,0.87
+Supraventricular,Lin,7,CAV,0.8575,0.83
+Supraventricular,Conv1,8,CAR,0.88,0.83
+Supraventricular,Conv1,8,CAV,0.82,0.77
+Supraventricular,Conv2,8,CAR,0.92,0.82
+Supraventricular,Conv2,8,CAV,0.9275,0.76
+Supraventricular,Conv3,8,CAR,0.9375,0.84
+Supraventricular,Conv3,8,CAV,0.9825,0.81
+Supraventricular,Lin,8,CAR,0.9225,0.87
+Supraventricular,Lin,8,CAV,0.8325,0.81
+Supraventricular,Conv1,9,CAR,0.865,0.79
+Supraventricular,Conv1,9,CAV,0.885,0.81
+Supraventricular,Conv2,9,CAR,0.94,0.85
+Supraventricular,Conv2,9,CAV,0.9825,0.78
+Supraventricular,Conv3,9,CAR,0.965,0.89
+Supraventricular,Conv3,9,CAV,0.9825,0.8
+Supraventricular,Lin,9,CAR,0.935,0.89
+Supraventricular,Lin,9,CAV,0.845,0.87
+Supraventricular,Conv1,10,CAR,0.875,0.82
+Supraventricular,Conv1,10,CAV,0.8975,0.82
+Supraventricular,Conv2,10,CAR,0.95,0.88
+Supraventricular,Conv2,10,CAV,0.9725,0.77
+Supraventricular,Conv3,10,CAR,0.9675,0.89
+Supraventricular,Conv3,10,CAV,0.985,0.8
+Supraventricular,Lin,10,CAR,0.94,0.9
+Supraventricular,Lin,10,CAV,0.88,0.79
+Premature Ventricular,Conv1,1,CAR,0.87,0.73
+Premature Ventricular,Conv1,1,CAV,0.84,0.74
+Premature Ventricular,Conv2,1,CAR,0.95,0.85
+Premature Ventricular,Conv2,1,CAV,0.9275,0.79
+Premature Ventricular,Conv3,1,CAR,0.97,0.88
+Premature Ventricular,Conv3,1,CAV,0.99,0.82
+Premature Ventricular,Lin,1,CAR,0.9625,0.92
+Premature Ventricular,Lin,1,CAV,0.88,0.81
+Premature Ventricular,Conv1,2,CAR,0.8725,0.74
+Premature Ventricular,Conv1,2,CAV,0.85,0.77
+Premature Ventricular,Conv2,2,CAR,0.95,0.77
+Premature Ventricular,Conv2,2,CAV,0.955,0.8
+Premature Ventricular,Conv3,2,CAR,0.975,0.83
+Premature Ventricular,Conv3,2,CAV,0.9925,0.88
+Premature Ventricular,Lin,2,CAR,0.9375,0.82
+Premature Ventricular,Lin,2,CAV,0.7725,0.73
+Premature Ventricular,Conv1,3,CAR,0.8975,0.89
+Premature Ventricular,Conv1,3,CAV,0.87,0.81
+Premature Ventricular,Conv2,3,CAR,0.96,0.93
+Premature Ventricular,Conv2,3,CAV,0.9825,0.87
+Premature Ventricular,Conv3,3,CAR,0.9825,0.94
+Premature Ventricular,Conv3,3,CAV,1.0,0.88
+Premature Ventricular,Lin,3,CAR,0.9525,0.95
+Premature Ventricular,Lin,3,CAV,0.8575,0.86
+Premature Ventricular,Conv1,4,CAR,0.8725,0.82
+Premature Ventricular,Conv1,4,CAV,0.8925,0.85
+Premature Ventricular,Conv2,4,CAR,0.9375,0.86
+Premature Ventricular,Conv2,4,CAV,0.9425,0.86
+Premature Ventricular,Conv3,4,CAR,0.9625,0.9
+Premature Ventricular,Conv3,4,CAV,0.98,0.86
+Premature Ventricular,Lin,4,CAR,0.95,0.91
+Premature Ventricular,Lin,4,CAV,0.9175,0.86
+Premature Ventricular,Conv1,5,CAR,0.9075,0.9
+Premature Ventricular,Conv1,5,CAV,0.9075,0.79
+Premature Ventricular,Conv2,5,CAR,0.9525,0.89
+Premature Ventricular,Conv2,5,CAV,0.96,0.84
+Premature Ventricular,Conv3,5,CAR,0.9725,0.88
+Premature Ventricular,Conv3,5,CAV,1.0,0.89
+Premature Ventricular,Lin,5,CAR,0.9425,0.92
+Premature Ventricular,Lin,5,CAV,0.89,0.85
+Premature Ventricular,Conv1,6,CAR,0.8575,0.79
+Premature Ventricular,Conv1,6,CAV,0.86,0.75
+Premature Ventricular,Conv2,6,CAR,0.925,0.85
+Premature Ventricular,Conv2,6,CAV,0.94,0.84
+Premature Ventricular,Conv3,6,CAR,0.9625,0.89
+Premature Ventricular,Conv3,6,CAV,0.9925,0.83
+Premature Ventricular,Lin,6,CAR,0.955,0.92
+Premature Ventricular,Lin,6,CAV,0.885,0.84
+Premature Ventricular,Conv1,7,CAR,0.885,0.81
+Premature Ventricular,Conv1,7,CAV,0.92,0.79
+Premature Ventricular,Conv2,7,CAR,0.95,0.83
+Premature Ventricular,Conv2,7,CAV,0.9725,0.81
+Premature Ventricular,Conv3,7,CAR,0.97,0.9
+Premature Ventricular,Conv3,7,CAV,0.9825,0.83
+Premature Ventricular,Lin,7,CAR,0.9575,0.9
+Premature Ventricular,Lin,7,CAV,0.9175,0.87
+Premature Ventricular,Conv1,8,CAR,0.8725,0.83
+Premature Ventricular,Conv1,8,CAV,0.8875,0.85
+Premature Ventricular,Conv2,8,CAR,0.935,0.88
+Premature Ventricular,Conv2,8,CAV,0.97,0.91
+Premature Ventricular,Conv3,8,CAR,0.96,0.9
+Premature Ventricular,Conv3,8,CAV,0.985,0.92
+Premature Ventricular,Lin,8,CAR,0.93,0.86
+Premature Ventricular,Lin,8,CAV,0.8025,0.73
+Premature Ventricular,Conv1,9,CAR,0.8775,0.82
+Premature Ventricular,Conv1,9,CAV,0.9175,0.82
+Premature Ventricular,Conv2,9,CAR,0.9325,0.86
+Premature Ventricular,Conv2,9,CAV,0.9725,0.83
+Premature Ventricular,Conv3,9,CAR,0.9625,0.89
+Premature Ventricular,Conv3,9,CAV,0.9875,0.88
+Premature Ventricular,Lin,9,CAR,0.945,0.87
+Premature Ventricular,Lin,9,CAV,0.8075,0.76
+Premature Ventricular,Conv1,10,CAR,0.8825,0.85
+Premature Ventricular,Conv1,10,CAV,0.8675,0.87
+Premature Ventricular,Conv2,10,CAR,0.9525,0.91
+Premature Ventricular,Conv2,10,CAV,0.97,0.88
+Premature Ventricular,Conv3,10,CAR,0.9775,0.93
+Premature Ventricular,Conv3,10,CAV,1.0,0.9
+Premature Ventricular,Lin,10,CAR,0.9525,0.91
+Premature Ventricular,Lin,10,CAV,0.905,0.9
+Fusion Beats,Conv1,1,CAR,0.925,0.94
+Fusion Beats,Conv1,1,CAV,0.9525,0.93
+Fusion Beats,Conv2,1,CAR,0.935,0.94
+Fusion Beats,Conv2,1,CAV,0.9725,0.97
+Fusion Beats,Conv3,1,CAR,0.955,0.98
+Fusion Beats,Conv3,1,CAV,0.9875,0.92
+Fusion Beats,Lin,1,CAR,0.9525,0.97
+Fusion Beats,Lin,1,CAV,0.9275,0.95
+Fusion Beats,Conv1,2,CAR,0.925,0.84
+Fusion Beats,Conv1,2,CAV,0.925,0.84
+Fusion Beats,Conv2,2,CAR,0.9475,0.87
+Fusion Beats,Conv2,2,CAV,0.99,0.91
+Fusion Beats,Conv3,2,CAR,0.955,0.89
+Fusion Beats,Conv3,2,CAV,0.9975,0.88
+Fusion Beats,Lin,2,CAR,0.955,0.87
+Fusion Beats,Lin,2,CAV,0.9425,0.92
+Fusion Beats,Conv1,3,CAR,0.9275,0.83
+Fusion Beats,Conv1,3,CAV,0.94,0.85
+Fusion Beats,Conv2,3,CAR,0.9425,0.81
+Fusion Beats,Conv2,3,CAV,0.975,0.84
+Fusion Beats,Conv3,3,CAR,0.9575,0.84
+Fusion Beats,Conv3,3,CAV,1.0,0.89
+Fusion Beats,Lin,3,CAR,0.965,0.88
+Fusion Beats,Lin,3,CAV,0.9375,0.83
+Fusion Beats,Conv1,4,CAR,0.9275,0.92
+Fusion Beats,Conv1,4,CAV,0.935,0.95
+Fusion Beats,Conv2,4,CAR,0.9425,0.94
+Fusion Beats,Conv2,4,CAV,0.97,0.92
+Fusion Beats,Conv3,4,CAR,0.955,0.95
+Fusion Beats,Conv3,4,CAV,0.9725,0.93
+Fusion Beats,Lin,4,CAR,0.95,0.97
+Fusion Beats,Lin,4,CAV,0.9425,0.92
+Fusion Beats,Conv1,5,CAR,0.925,0.91
+Fusion Beats,Conv1,5,CAV,0.9425,0.92
+Fusion Beats,Conv2,5,CAR,0.9525,0.92
+Fusion Beats,Conv2,5,CAV,0.9825,0.94
+Fusion Beats,Conv3,5,CAR,0.9575,0.94
+Fusion Beats,Conv3,5,CAV,0.9925,0.97
+Fusion Beats,Lin,5,CAR,0.9525,0.96
+Fusion Beats,Lin,5,CAV,0.9075,0.91
+Fusion Beats,Conv1,6,CAR,0.9,0.92
+Fusion Beats,Conv1,6,CAV,0.905,0.91
+Fusion Beats,Conv2,6,CAR,0.9325,0.95
+Fusion Beats,Conv2,6,CAV,0.975,0.89
+Fusion Beats,Conv3,6,CAR,0.955,0.96
+Fusion Beats,Conv3,6,CAV,0.9975,0.93
+Fusion Beats,Lin,6,CAR,0.9525,0.95
+Fusion Beats,Lin,6,CAV,0.92,0.91
+Fusion Beats,Conv1,7,CAR,0.9175,0.99
+Fusion Beats,Conv1,7,CAV,0.92,0.98
+Fusion Beats,Conv2,7,CAR,0.9325,0.99
+Fusion Beats,Conv2,7,CAV,0.96,0.97
+Fusion Beats,Conv3,7,CAR,0.955,0.98
+Fusion Beats,Conv3,7,CAV,0.98,0.96
+Fusion Beats,Lin,7,CAR,0.945,0.99
+Fusion Beats,Lin,7,CAV,0.8875,0.94
+Fusion Beats,Conv1,8,CAR,0.92,0.94
+Fusion Beats,Conv1,8,CAV,0.935,0.91
+Fusion Beats,Conv2,8,CAR,0.9325,0.94
+Fusion Beats,Conv2,8,CAV,0.9575,0.87
+Fusion Beats,Conv3,8,CAR,0.9625,0.96
+Fusion Beats,Conv3,8,CAV,0.9675,0.9
+Fusion Beats,Lin,8,CAR,0.9375,0.93
+Fusion Beats,Lin,8,CAV,0.9075,0.88
+Fusion Beats,Conv1,9,CAR,0.9125,0.9
+Fusion Beats,Conv1,9,CAV,0.925,0.87
+Fusion Beats,Conv2,9,CAR,0.9375,0.93
+Fusion Beats,Conv2,9,CAV,0.97,0.88
+Fusion Beats,Conv3,9,CAR,0.955,0.92
+Fusion Beats,Conv3,9,CAV,0.995,0.87
+Fusion Beats,Lin,9,CAR,0.945,0.92
+Fusion Beats,Lin,9,CAV,0.9175,0.89
+Fusion Beats,Conv1,10,CAR,0.8975,0.87
+Fusion Beats,Conv1,10,CAV,0.905,0.87
+Fusion Beats,Conv2,10,CAR,0.92,0.89
+Fusion Beats,Conv2,10,CAV,0.9525,0.96
+Fusion Beats,Conv3,10,CAR,0.9275,0.93
+Fusion Beats,Conv3,10,CAV,0.9725,0.92
+Fusion Beats,Lin,10,CAR,0.9425,0.9
+Fusion Beats,Lin,10,CAV,0.635,0.62
+Unknown,Conv1,1,CAR,0.97,0.92
+Unknown,Conv1,1,CAV,0.97,0.9
+Unknown,Conv2,1,CAR,0.97,0.92
+Unknown,Conv2,1,CAV,0.9925,0.91
+Unknown,Conv3,1,CAR,0.975,0.92
+Unknown,Conv3,1,CAV,0.9975,0.92
+Unknown,Lin,1,CAR,0.9725,0.92
+Unknown,Lin,1,CAV,0.9575,0.84
+Unknown,Conv1,2,CAR,0.95,0.95
+Unknown,Conv1,2,CAV,0.9375,0.92
+Unknown,Conv2,2,CAR,0.9625,0.96
+Unknown,Conv2,2,CAV,0.98,0.96
+Unknown,Conv3,2,CAR,0.9775,0.95
+Unknown,Conv3,2,CAV,1.0,0.96
+Unknown,Lin,2,CAR,0.9525,0.95
+Unknown,Lin,2,CAV,0.92,0.87
+Unknown,Conv1,3,CAR,0.9475,0.96
+Unknown,Conv1,3,CAV,0.9475,0.92
+Unknown,Conv2,3,CAR,0.965,0.96
+Unknown,Conv2,3,CAV,0.9875,0.92
+Unknown,Conv3,3,CAR,0.975,0.96
+Unknown,Conv3,3,CAV,0.995,0.97
+Unknown,Lin,3,CAR,0.9575,0.96
+Unknown,Lin,3,CAV,0.965,0.94
+Unknown,Conv1,4,CAR,0.9575,0.91
+Unknown,Conv1,4,CAV,0.9475,0.92
+Unknown,Conv2,4,CAR,0.9625,0.92
+Unknown,Conv2,4,CAV,0.9675,0.95
+Unknown,Conv3,4,CAR,0.965,0.92
+Unknown,Conv3,4,CAV,0.9875,0.97
+Unknown,Lin,4,CAR,0.9575,0.92
+Unknown,Lin,4,CAV,0.935,0.94
+Unknown,Conv1,5,CAR,0.9475,0.9
+Unknown,Conv1,5,CAV,0.97,0.9
+Unknown,Conv2,5,CAR,0.9675,0.91
+Unknown,Conv2,5,CAV,0.99,0.88
+Unknown,Conv3,5,CAR,0.97,0.9
+Unknown,Conv3,5,CAV,1.0,0.93
+Unknown,Lin,5,CAR,0.95,0.91
+Unknown,Lin,5,CAV,0.95,0.88
+Unknown,Conv1,6,CAR,0.9325,0.93
+Unknown,Conv1,6,CAV,0.9325,0.92
+Unknown,Conv2,6,CAR,0.945,0.93
+Unknown,Conv2,6,CAV,0.98,0.96
+Unknown,Conv3,6,CAR,0.96,0.93
+Unknown,Conv3,6,CAV,0.9975,0.95
+Unknown,Lin,6,CAR,0.94,0.93
+Unknown,Lin,6,CAV,0.94,0.98
+Unknown,Conv1,7,CAR,0.9475,0.95
+Unknown,Conv1,7,CAV,0.95,0.89
+Unknown,Conv2,7,CAR,0.9775,0.96
+Unknown,Conv2,7,CAV,0.9975,0.95
+Unknown,Conv3,7,CAR,0.98,0.96
+Unknown,Conv3,7,CAV,1.0,0.95
+Unknown,Lin,7,CAR,0.9575,0.97
+Unknown,Lin,7,CAV,0.8875,0.85
+Unknown,Conv1,8,CAR,0.96,0.96
+Unknown,Conv1,8,CAV,0.955,0.93
+Unknown,Conv2,8,CAR,0.9725,0.97
+Unknown,Conv2,8,CAV,0.995,0.94
+Unknown,Conv3,8,CAR,0.975,0.97
+Unknown,Conv3,8,CAV,0.9875,0.97
+Unknown,Lin,8,CAR,0.9675,0.97
+Unknown,Lin,8,CAV,0.9725,0.96
+Unknown,Conv1,9,CAR,0.955,0.94
+Unknown,Conv1,9,CAV,0.9625,0.94
+Unknown,Conv2,9,CAR,0.9725,0.96
+Unknown,Conv2,9,CAV,0.99,0.94
+Unknown,Conv3,9,CAR,0.9825,0.96
+Unknown,Conv3,9,CAV,0.995,0.95
+Unknown,Lin,9,CAR,0.975,0.95
+Unknown,Lin,9,CAV,0.935,0.93
+Unknown,Conv1,10,CAR,0.9725,0.92
+Unknown,Conv1,10,CAV,0.975,0.92
+Unknown,Conv2,10,CAR,0.9825,0.93
+Unknown,Conv2,10,CAV,0.995,0.93
+Unknown,Conv3,10,CAR,0.99,0.93
+Unknown,Conv3,10,CAV,1.0,0.94
+Unknown,Lin,10,CAR,0.9825,0.93
+Unknown,Lin,10,CAV,0.9525,0.91

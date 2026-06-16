@@ -63,7 +63,7 @@ def train_ecg_model(
     latent_dim: int,
     batch_size: int,
     model_name: str = "model",
-    model_dir: Path = Path.cwd() / f"results/ecg/",
+    model_dir: Path = Path.cwd() / f"results/ecg_tq/",
     data_dir: Path = Path.cwd() / "data/ecg",
 ) -> None:
     logging.info("Fitting an ECG Classifier")
@@ -83,9 +83,9 @@ def concept_accuracy(
     random_seeds: list[int],
     latent_dim: int,
     plot: bool,
-    save_dir: Path = Path.cwd() / "results/ecg/concept_accuracy",
+    save_dir: Path = Path.cwd() / "results/ecg_tq/concept_accuracy",
     data_dir: Path = Path.cwd() / "data/ecg",
-    model_dir: Path = Path.cwd() / "results/ecg",
+    model_dir: Path = Path.cwd() / "results/ecg_tq",
     model_name: str = "model",
 ) -> None:
     device = torch.device("cpu")
@@ -172,9 +172,9 @@ def concept_accuracy(
 def statistical_significance(
     random_seed: int,
     latent_dim: int,
-    save_dir: Path = Path.cwd() / "results/ecg/statistical_significance",
+    save_dir: Path = Path.cwd() / "results/ecg_tq/statistical_significance",
     data_dir: Path = Path.cwd() / "data/ecg",
-    model_dir: Path = Path.cwd() / "results/ecg",
+    model_dir: Path = Path.cwd() / "results/ecg_tq",
     model_name: str = "model",
 ) -> None:
     device = torch.device("cpu")
@@ -241,13 +241,13 @@ def global_explanations(
     batch_size: int,
     latent_dim: int,
     plot: bool,
-    save_dir: Path = Path.cwd() / "results/ecg/global_explanations",
+    save_dir: Path = Path.cwd() / "results/ecg_tq/global_explanations",
     data_dir: Path = Path.cwd() / "data/ecg",
     model_name: str = "model",
 ) -> None:
     device = torch.device("cpu")
     torch.manual_seed(random_seed)
-    model_dir = Path.cwd() / f"results/ecg/{model_name}"
+    model_dir = Path.cwd() / f"results/ecg_tq/{model_name}"
     if not save_dir.exists():
         os.makedirs(save_dir)
     if not model_dir.exists():
@@ -337,9 +337,9 @@ def feature_importance(
     batch_size: int,
     latent_dim: int,
     plot: bool,
-    save_dir: Path = Path.cwd() / "results/ecg/feature_importance",
+    save_dir: Path = Path.cwd() / "results/ecg_tq/feature_importance",
     data_dir: Path = Path.cwd() / "data/ecg",
-    model_dir: Path = Path.cwd() / f"results/ecg",
+    model_dir: Path = Path.cwd() / f"results/ecg_tq",
     model_name: str = "model",
 ) -> None:
     device = torch.device("cpu")
@@ -468,7 +468,7 @@ if __name__ == "__main__":
     #     )
     # else:
     #     raise ValueError(f"{args.name} is not a valid experiment name")
-    # train_ecg_model(args.latent_dim, args.batch_size, model_name=model_name)
+    train_ecg_model(args.latent_dim, args.batch_size, model_name=model_name)
     concept_accuracy(args.seeds, args.latent_dim, args.plot, model_name=model_name)
     statistical_significance(args.seeds[0], args.latent_dim, model_name=model_name)
-    feature_importance(args.seeds[0],100,args.latent_dim,args.plot,model_name=model_name,)
+    feature_importance(args.seeds[0],100,args.latent_dim,args.plot,model_name=model_name)

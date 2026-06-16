@@ -75,7 +75,7 @@ class ClassifierMnist(nn.Module):
         x = self.fc2(x)
         return x
 
-    def representation_to_output(self, h):
+    def representation_to_output(self, h, x=None):
         h = self.dropout(h)
         h = self.out(h)
         return h
