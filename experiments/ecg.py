@@ -399,7 +399,7 @@ if __name__ == "__main__":
     parser.add_argument("--batch_size", type=int, default=300)
     parser.add_argument("--latent_dim", type=int, default=32)
     parser.add_argument("--train", action="store_true")
-    parser.add_argument("--plot", action="store_true")
+    parser.add_argument("--plot", action="store_true",default=True)
     args = parser.parse_args()
     model_name = f"model_{args.latent_dim}"
     # if args.train:
@@ -427,6 +427,6 @@ if __name__ == "__main__":
     # else:
     #     raise ValueError(f"{args.name} is not a valid experiment name")
     # train_ecg_model(args.latent_dim, args.batch_size, model_name=model_name)
-    # concept_accuracy(args.seeds, args.latent_dim, args.plot, model_name=model_name)
-    # statistical_significance(args.seeds[0], args.latent_dim, model_name=model_name)
+    concept_accuracy(args.seeds, args.latent_dim, args.plot, model_name=model_name)
+    statistical_significance(args.seeds[0], args.latent_dim, model_name=model_name)
     feature_importance(args.seeds[0],args.batch_size,args.latent_dim,args.plot,model_name=model_name,)
