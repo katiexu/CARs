@@ -50,6 +50,11 @@ def train_mnist_model(
     if not model_dir.exists():
         os.makedirs(model_dir)
     model = ClassifierMnist(latent_dim, model_name).to(device)
+    try:
+        model.load_state_dict(torch.load(model_dir / f"{model_name}.pt"), strict=False)
+        print("load success")
+    except:
+        pass
     train_set = MNIST(data_dir, train=True, download=True)
     test_set = MNIST(data_dir, train=False, download=True)
     train_transform = transforms.Compose([transforms.ToTensor()])
@@ -861,7 +866,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     model_name = f"model_{args.latent_dim}"
-    # train_mnist_model(args.latent_dim, args.batch_size, model_name=model_name)
+    train_mnist_model(args.latent_dim, args.batch_size, model_name=model_name)
     # concept_accuracy(args.seeds, args.latent_dim, args.plot, model_name=model_name)
     # global_explanations(args.seeds[0],args.batch_size,args.latent_dim,args.plot,model_name=model_name, )
     # statistical_significance(args.seeds[0], args.latent_dim, model_name=model_name)
@@ -870,7 +875,7 @@ if __name__ == "__main__":
     # concept_size_impact(args.seeds, args.latent_dim, args.concept_sizes, args.plot, model_name=model_name, )
     # tcar_inter_concept(args.seeds[0], args.batch_size, args.latent_dim, args.plot, model_name=model_name, )
     # adversarial_robustness(args.seeds[0], args.batch_size, args.latent_dim, model_name=model_name)
-    senn()
+    # senn()
 
     # if args.train:
     #     train_mnist_model(args.latent_dim, args.batch_size, model_name=model_name)

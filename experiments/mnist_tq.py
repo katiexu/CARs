@@ -950,7 +950,7 @@ if __name__ == "__main__":
     #     senn()
     # else:
     #     raise ValueError(f"{args.name} is not a valid experiment name")
-    train_mnist_model(args.latent_dim, args.batch_size, model_name=model_name)
+    # train_mnist_model(args.latent_dim, args.batch_size, model_name=model_name)
     concept_accuracy(args.seeds, args.latent_dim, args.plot, model_name=model_name)
     global_explanations(args.seeds[0],args.batch_size,args.latent_dim,args.plot,model_name=model_name,)
     statistical_significance(args.seeds[0], args.latent_dim, model_name=model_name)

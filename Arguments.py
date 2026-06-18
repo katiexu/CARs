@@ -1,8 +1,5 @@
 class Arguments:
     def __init__(self, **kwargs): #task, n_qubits, n_layers, fold):
-
-        n_qubits = kwargs.get('n_qubits', 6)
-        n_layers = kwargs.get('n_layers', 2)
         task = kwargs.get('task', 'MNIST')
         fold = kwargs.get('fold', 1)
 
@@ -22,12 +19,13 @@ class Arguments:
         self.allowed_gates = ['Identity', 'U3', 'data', 'data+U3'] #['Identity', 'RX', 'RY', 'RZ']
         
         self.task      = task
-        self.n_qubits   = n_qubits        
+        self.n_qubits   = 6
+        self.n_layers = 2
         self.epochs     = 1
         self.batch_size = 256
         self.sampling = 5
 
-        self.n_layers = n_layers      
+
         self.exploration = [0.001, 0.002, 0.003]
         
         self.backend    = 'tq'      # 'tq' for TorchQuantum; 'qi' for Qiskit Aer Simulator; 'qml' for PennyLane
@@ -57,7 +55,6 @@ class Arguments:
             self.sampling = 5
             self.kernel      = 4
 
-            self.n_layers = n_layers
             self.base_code = [self.n_layers, 2, 3, 4, 1]
             self.exploration = [0.001, 0.002, 0.003]
 

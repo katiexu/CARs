@@ -265,9 +265,23 @@ class QNet(nn.Module):
         self.QuantumLayer_n = TQLayer_n(self.args, self.design)
         self.QuantumLayer_remain = TQLayer_remain(self.args, self.design)
         self.criterion = nn.CrossEntropyLoss()
-        self.out = nn.Linear(in_features=4, out_features=10)
-        self.adaptive_pool = nn.AdaptiveAvgPool2d((4, 4))
+        self.out = nn.Linear(in_features=arguments.n_qubits, out_features=10)
+        self.adaptive_pool = nn.AdaptiveAvgPool2d((arguments.n_qubits, arguments.n_layers))
+        self.conv_encoder = nn.Sequential(
+            # Conv 1: 1 -> 16 channels, 28x28 -> 14x14
+            nn.Conv2d(1, 6, kernel_size=5, stride=1, padding=2),
+            nn.ReLU(),
+            nn.MaxPool2d(kernel_size=2, stride=2),  # 28 -> 14
 
+            # Conv 2: 16 -> 32 channels, 14x14 -> 7x7
+            nn.Conv2d(6, 12, kernel_size=5, stride=1, padding=2),
+            nn.ReLU(),
+            nn.MaxPool2d(kernel_size=2, stride=2),  # 14 -> 7
+
+            # Conv 3: 32 -> 1 channels, 7x7 -> output_size x output_size
+            nn.Conv2d(12, 1, kernel_size=3, stride=1, padding=1),
+            nn.ReLU(),
+        )
         self.q_params_rot = nn.Parameter(
             pi * torch.rand(self.args.n_layers, self.args.n_qubits, 3))  # each U3 gate needs 3 parameters
         self.q_params_enta = nn.Parameter(
@@ -275,8 +289,9 @@ class QNet(nn.Module):
 
     def preprocess(self, x):
         bsz = x.shape[0]
+        x = self.conv_encoder(x)
         x = self.adaptive_pool(x)
-        x = x.view(bsz, 4, 4)
+        x = x.view(bsz, self.args.n_qubits, self.args.n_layers)
         return x
     def forward(self, x):
         x = self.preprocess(x)
@@ -297,6 +312,7 @@ class QNet(nn.Module):
 
     def get_hooked_modules(self) -> dict[str, nn.Module]:
         return {
+            ""
             "adaptive_pool": self.adaptive_pool,
             "tqlayer_n": self.QuantumLayer_n,
             "tqlayer_n_remain": self.QuantumLayer_remain,
