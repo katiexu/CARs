@@ -289,7 +289,7 @@ class QNet(nn.Module):
 
     def preprocess(self, x):
         bsz = x.shape[0]
-        x = self.conv_encoder(x)
+        # x = self.conv_encoder(x)
         x = self.adaptive_pool(x)
         x = x.view(bsz, self.args.n_qubits, self.args.n_layers)
         return x
